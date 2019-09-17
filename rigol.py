@@ -9,8 +9,8 @@ with open('rs232.json', 'r') as f:
     rs232 = json.load(f)
 
 class RigolMSO():        
-    def __init__(self):
-        self.instr = vxi11.Instrument("192.168.1.10")
+    def __init__(self, addr):
+        self.instr = vxi11.Instrument(addr)
         print(self.instr.ask("*IDN?"))
         self.triggers = {"edge":"EDGE",
         "pulse": "PULSe",
