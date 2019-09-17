@@ -3,10 +3,12 @@ import json
 
 from mso.triggers import TriggerFactory
 
-rs232 = None
+sweap = None
 
-with open('rs232.json', 'r') as f:
-    rs232 = json.load(f)
+with open('trigger.json', 'r') as f:
+    sweap = json.load(f)
+
+print(sweap)
 
 class RigolMSO():        
     def __init__(self, addr):
@@ -61,3 +63,12 @@ class RigolMSO():
             return self.trigger
         except KeyError as err:
             print('Unsupported trigger:', err)
+    
+    def sweapTrigger(self, state):
+        try:
+            self.instr.write(":TRIGger:SWEep {0}".format(sweap['trigger'][state.lower()]))
+        except KeyError as err:
+                print('Unsupported trigger sweap:', err)
+
+    def getSweap(self):
+        return self.instr.ask(":TRIGger:SWEep?")

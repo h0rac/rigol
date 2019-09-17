@@ -1,0 +1,8 @@
+{
+    "trigger": {
+        "auto": "AUTO",
+        "normal": "NORMal",
+        "single": "SINGle",
+        "start": "STARt"
+    }
+}
