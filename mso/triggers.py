@@ -1,5 +1,6 @@
 import json 
 import os
+import sys
 
 with open("{}/rigol/rs232.json".format(os.path.dirname(os.getcwd())), 'r') as f:
     rs232 = json.load(f)
@@ -19,7 +20,7 @@ class RS232(TriggerFactory):
         self.instr = instr
 
     def getSourceChannel(self):
-          return    self.instr.ask(":TRIGger:RS232:SOURce?")
+          return  self.instr.ask(":TRIGger:RS232:SOURce?")
 
     def getBoud(self):
         return  self.instr.ask(":TRIGger:RS232:BAUD?")
@@ -53,19 +54,21 @@ class RS232(TriggerFactory):
             self.instr.write(":TRIGger:RS232:LEVel {0}".format(voltage))
         except Error as err:
             print('Unsupported voltage:', err)
+            sys.exit()
     
     def setSourceChannel(self, chan):
         try:
             self.instr.write(":TRIGger:RS232:SOURce {0}".format(rs232['source'][chan.lower()]))
         except KeyError as err:
             print('Unsupported channel source:', err)
-    
+            sys.exit()
         
     def setWhen(self, value):
         try:
             self.instr.write(":TRIGger:RS232:WHEN {0}".format(rs232['when'][value.lower()]))
         except KeyError as err:
             print('Unsupported when source:', err)
+            sys.exit()
     
     def setData(self, num):
         result = num in rs232['data']
@@ -73,7 +76,7 @@ class RS232(TriggerFactory):
             self.instr.write(":TRIGger:RS232:DATA {0}".format(num))
         else:
             print('Unsupported data, accept value in range 0-255')
-            return False
+            sys.exit()
     
     def setStopBit(self, stopBit):
         result = stopBit in rs232['stopBits']
@@ -81,13 +84,14 @@ class RS232(TriggerFactory):
             self.instr.write(":TRIGger:RS232:STOP {0}".format(stopBit))
         else:
             print('Unsupported value, accept 1,1.5,2')
-            return False
+            sys.exit()
     
     def setParity(self, parity):
         try:
             self.instr.write(":TRIGger:RS232:PARity {0}".format(rs232['parity'][parity.lower()]))
         except KeyError as err:
             print('Unsupported parity, accept ODD, EVEN, NONE:', err)
+            sys.exit()
     
     def setDataBits(self, bits):
         result = bits in rs232['dataBits']
@@ -95,7 +99,7 @@ class RS232(TriggerFactory):
             self.instr.write(":TRIGger:RS232:WIDTh {0}".format(bits))
         else:
             print('Unsupported value, accept 5,6,7 or 8')
-            return False
+            sys.exit()
          
     
     def setup(self, src = "chan1", voltage = 0, baud=9600, when="data",data=10, dataBits=8, stopBit=1, parity="none"):

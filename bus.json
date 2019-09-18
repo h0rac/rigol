@@ -1,0 +1,13 @@
+{
+    "mode": {
+        "parallel":"PARallel",
+        "rs232": "RS232",
+        "spi": "SPI",
+        "iic": "IIC",
+        "iis": "IIS",
+        "lib": "LIN",
+        "can": "CAN",
+        "flexray": "FLEXray",
+        "m1553": "M1553"
+    }
+}
