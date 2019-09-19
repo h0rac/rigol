@@ -1,6 +1,7 @@
 import json 
 import os
 import sys
+from abc import ABC, abstractmethod
 
 with open("{}/rigol/json/trigger/rs232.json".format(os.path.dirname(os.getcwd())), 'r') as f:
     rs232 = json.load(f)
@@ -23,13 +24,21 @@ class TriggerFactory(object):
 
     factory = staticmethod(factory)
 
-class Trigger():
+class Trigger(ABC):
     """Class represents interface for triggers
-
-        Returns:
-            object: timeout trigger object
     """
     def __init__(self):
+        super().__init__()
+        pass
+
+    @abstractmethod
+    def setup(self):
+        pass
+    @abstractmethod
+    def getWhen(self):
+        pass
+    @abstractmethod
+    def getSourceChannel(self):
         pass
 
 class RS232(Trigger):
@@ -94,7 +103,7 @@ class RS232(Trigger):
         """
         return  self.instr.ask(":TRIGger:RS232:WIDTh?")
 
-    def setBoud(self, boud=9600):
+    def _setBoud(self, boud=9600):
         """Set boud lever for trigger
 
         Args:
@@ -107,7 +116,7 @@ class RS232(Trigger):
         except ValueError as err:
             print('Unsupported boud:', err)
     
-    def setVoltageLevel(self, voltage=0.0):
+    def _setVoltageLevel(self, voltage=0.0):
         """Set voltage lever for trigger
 
         Args:
@@ -119,7 +128,7 @@ class RS232(Trigger):
             print('Unsupported voltage:', err)
             sys.exit()
     
-    def setSourceChannel(self, chan="chan1"):
+    def _setSourceChannel(self, chan="chan1"):
         """Set channel source for trigger
 
         Args:
@@ -127,7 +136,7 @@ class RS232(Trigger):
             provide as chan1, chan2... it will be convered to CHANnel1, CHANnel2 etc 
             
             available channels:
-            D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel3|CHANnel4
+            D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4
         """
         try:
             self.instr.write(":TRIGger:RS232:SOURce {0}".format(rs232['source'][chan.lower()]))
@@ -135,7 +144,7 @@ class RS232(Trigger):
             print('Unsupported channel source:', err)
             sys.exit()
         
-    def setWhen(self, value="data"):
+    def _setWhen(self, value="data"):
         """Set when trigger fire
 
         Args:
@@ -146,7 +155,7 @@ class RS232(Trigger):
         except KeyError as err:
             print('Unsupported when source:', err)
     
-    def setData(self, num=10):
+    def _setData(self, num=10):
         """Set on which ASCII char trigger when "data" is set as when
 
         Args:
@@ -158,7 +167,7 @@ class RS232(Trigger):
         else:
             print('Unsupported data, accept value in range 0-255')
     
-    def setStopBit(self, stopBit=1):
+    def _setStopBit(self, stopBit=1):
         """Set stop bit for rs232
 
         Args:
@@ -170,7 +179,7 @@ class RS232(Trigger):
         else:
             print('Unsupported value, accept 1,1.5,2')
     
-    def setParity(self, parity="none"):
+    def _setParity(self, parity="none"):
         """Set stop bit for rs232
 
         Args:
@@ -181,7 +190,7 @@ class RS232(Trigger):
         except KeyError as err:
             print('Unsupported parity, accept ODD, EVEN, NONE:', err)
     
-    def setDataBits(self, bits=8):
+    def _setDataBits(self, bits=8):
         """Set stop bit for rs232
 
         Args:
@@ -198,24 +207,24 @@ class RS232(Trigger):
         """Set rs232 parameters in one function
 
         Args:
-            src (str): source channel
-            voltage (str): source voltage
+            src (str): source channel -> D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4
+            voltage (str): source voltage accept extension -> uV|nV|kV|mV|V
             boud (str): boud rate
-            when (str): when to trigger
-            data (str): if when is data set ASCII dec value to trigger
-            dataBits (int): data bits
-            stopBit (int): stop bit
-            parity (str): parity for rs232
+            when (str): when to trigger -> start|error|cerror|data
+            data (str): if when is data set ASCII dec value to trigger 0-255 decimal
+            dataBits (int): accepts -> 5|6|7|8
+            stopBit (int): stop bit -> 1|1.5|2
+            parity (str): parity for rs232 -> none|even|odd
         """
-        self.setSourceChannel(src)
-        self.setVoltageLevel(voltage)
-        self.setBoud(baud)
-        self.setWhen(when)
+        self._setSourceChannel(src)
+        self._setVoltageLevel(voltage)
+        self._setBoud(baud)
+        self._setWhen(when)
         if when == "data":
-            self.setData(data)
-        self.setStopBit(stopBit)
-        self.setParity(parity)
-        self.setDataBits(dataBits)
+            self._setData(data)
+        self._setStopBit(stopBit)
+        self._setParity(parity)
+        self._setDataBits(dataBits)
     
     def restoreDefault(self):
         """Restore rs232 trigger options to default
