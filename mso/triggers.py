@@ -23,7 +23,16 @@ class TriggerFactory(object):
 
     factory = staticmethod(factory)
 
-class RS232(TriggerFactory):
+class Trigger():
+    """Class represents interface for triggers
+
+        Returns:
+            object: timeout trigger object
+    """
+    def __init__(self):
+        pass
+
+class RS232(Trigger):
     """RS232 Trigger class"""
 
     def __init__(self, instr):
@@ -232,4 +241,125 @@ class RS232(TriggerFactory):
         return {'src':self.getSourceChannel(), 'voltage':self.getVoltageLevel(), 'baud':self.getBoud(), 
         'when':self.getWhen(), 'data':self.getData(), "dataBits":self.getDataBits(), "stopBit":self.getStopBit(), "parity":self.getParity()}
 
+class Timeout(Trigger):
+    """Class represents Timeout trigger
 
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: timeout trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+class Runt(Trigger):
+    """Class represents Runt trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: runt trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+class Window(Trigger):
+    """Class represents Window trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: window trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+
+class Delay(Trigger):
+    """Class represents Delay trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: delay trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+class SetupHold(Trigger):
+    """Class represents Setup/Hold trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: setup/hold trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+class NithEdge(Trigger):
+    """Class represents NthEdge trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: NthEdge trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+class I2C(Trigger):
+    """Class represents I2C trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: I2C trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+class SPI(Trigger):
+    """Class represents SPI trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: SPI trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+
+class CAN(Trigger):
+    """Class represents CAN trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: CAN trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+class FlexRay(Trigger):
+    """Class represents FlexRay trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: FlexRay trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr
+
+class LIN(Trigger):
+    """Class represents LIN trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: LIN trigger object
+    """
+    def __init__(self, instr):
+        self.instr = instr

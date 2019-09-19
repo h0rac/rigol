@@ -47,7 +47,16 @@ class TriggerFactory(object):
 
     factory = staticmethod(factory)
 
-class RS232(TriggerFactory):
+class Trigger():
+    &#34;&#34;&#34;Class represents interface for triggers
+
+        Returns:
+            object: timeout trigger object
+    &#34;&#34;&#34;
+    def __init__(self):
+        pass
+
+class RS232(Trigger):
     &#34;&#34;&#34;RS232 Trigger class&#34;&#34;&#34;
 
     def __init__(self, instr):
@@ -254,7 +263,130 @@ class RS232(TriggerFactory):
             dict: current configuration
         &#34;&#34;&#34;
         return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), 
-        &#39;when&#39;:self.getWhen(), &#39;data&#39;:self.getData(), &#34;dataBits&#34;:self.getDataBits(), &#34;stopBit&#34;:self.getStopBit(), &#34;parity&#34;:self.getParity()}</code></pre>
+        &#39;when&#39;:self.getWhen(), &#39;data&#39;:self.getData(), &#34;dataBits&#34;:self.getDataBits(), &#34;stopBit&#34;:self.getStopBit(), &#34;parity&#34;:self.getParity()}
+
+class Timeout(Trigger):
+    &#34;&#34;&#34;Class represents Timeout trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: timeout trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+class Runt(Trigger):
+    &#34;&#34;&#34;Class represents Runt trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: runt trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+class Window(Trigger):
+    &#34;&#34;&#34;Class represents Window trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: window trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+
+class Delay(Trigger):
+    &#34;&#34;&#34;Class represents Delay trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: delay trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+class SetupHold(Trigger):
+    &#34;&#34;&#34;Class represents Setup/Hold trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: setup/hold trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+class NithEdge(Trigger):
+    &#34;&#34;&#34;Class represents NthEdge trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: NthEdge trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+class I2C(Trigger):
+    &#34;&#34;&#34;Class represents I2C trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: I2C trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+class SPI(Trigger):
+    &#34;&#34;&#34;Class represents SPI trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: SPI trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+
+class CAN(Trigger):
+    &#34;&#34;&#34;Class represents CAN trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: CAN trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+class FlexRay(Trigger):
+    &#34;&#34;&#34;Class represents FlexRay trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: FlexRay trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+
+class LIN(Trigger):
+    &#34;&#34;&#34;Class represents LIN trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: LIN trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
 </details>
 </section>
 <section>
@@ -266,6 +398,210 @@ class RS232(TriggerFactory):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="mso.triggers.CAN"><code class="flex name class">
+<span>class <span class="ident">CAN</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents CAN trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>CAN trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class CAN(Trigger):
+    &#34;&#34;&#34;Class represents CAN trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: CAN trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
+<dt id="mso.triggers.Delay"><code class="flex name class">
+<span>class <span class="ident">Delay</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents Delay trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>delay trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Delay(Trigger):
+    &#34;&#34;&#34;Class represents Delay trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: delay trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
+<dt id="mso.triggers.FlexRay"><code class="flex name class">
+<span>class <span class="ident">FlexRay</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents FlexRay trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>FlexRay trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FlexRay(Trigger):
+    &#34;&#34;&#34;Class represents FlexRay trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: FlexRay trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
+<dt id="mso.triggers.I2C"><code class="flex name class">
+<span>class <span class="ident">I2C</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents I2C trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>I2C trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class I2C(Trigger):
+    &#34;&#34;&#34;Class represents I2C trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: I2C trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
+<dt id="mso.triggers.LIN"><code class="flex name class">
+<span>class <span class="ident">LIN</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents LIN trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>LIN trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LIN(Trigger):
+    &#34;&#34;&#34;Class represents LIN trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: LIN trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
+<dt id="mso.triggers.NithEdge"><code class="flex name class">
+<span>class <span class="ident">NithEdge</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents NthEdge trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>NthEdge trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class NithEdge(Trigger):
+    &#34;&#34;&#34;Class represents NthEdge trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: NthEdge trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
 <dt id="mso.triggers.RS232"><code class="flex name class">
 <span>class <span class="ident">RS232</span></span>
 <span>(</span><span>instr)</span>
@@ -282,7 +618,7 @@ class RS232(TriggerFactory):
 </dl></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class RS232(TriggerFactory):
+<pre><code class="python">class RS232(Trigger):
     &#34;&#34;&#34;RS232 Trigger class&#34;&#34;&#34;
 
     def __init__(self, instr):
@@ -493,7 +829,7 @@ class RS232(TriggerFactory):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="mso.triggers.TriggerFactory" href="#mso.triggers.TriggerFactory">TriggerFactory</a></li>
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -931,13 +1267,178 @@ D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel
 </details>
 </dd>
 </dl>
-<h3>Inherited members</h3>
+</dd>
+<dt id="mso.triggers.Runt"><code class="flex name class">
+<span>class <span class="ident">Runt</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents Runt trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>runt trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Runt(Trigger):
+    &#34;&#34;&#34;Class represents Runt trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: runt trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
 <ul class="hlist">
-<li><code><b><a title="mso.triggers.TriggerFactory" href="#mso.triggers.TriggerFactory">TriggerFactory</a></b></code>:
-<ul class="hlist">
-<li><code><a title="mso.triggers.TriggerFactory.factory" href="#mso.triggers.TriggerFactory.factory">factory</a></code></li>
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
 </ul>
-</li>
+</dd>
+<dt id="mso.triggers.SPI"><code class="flex name class">
+<span>class <span class="ident">SPI</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents SPI trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>SPI trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SPI(Trigger):
+    &#34;&#34;&#34;Class represents SPI trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: SPI trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
+<dt id="mso.triggers.SetupHold"><code class="flex name class">
+<span>class <span class="ident">SetupHold</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents Setup/Hold trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>setup/hold trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SetupHold(Trigger):
+    &#34;&#34;&#34;Class represents Setup/Hold trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: setup/hold trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
+<dt id="mso.triggers.Timeout"><code class="flex name class">
+<span>class <span class="ident">Timeout</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents Timeout trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>timeout trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Timeout(Trigger):
+    &#34;&#34;&#34;Class represents Timeout trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: timeout trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
+<dt id="mso.triggers.Trigger"><code class="flex name class">
+<span>class <span class="ident">Trigger</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents interface for triggers</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>timeout trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Trigger():
+    &#34;&#34;&#34;Class represents interface for triggers
+
+        Returns:
+            object: timeout trigger object
+    &#34;&#34;&#34;
+    def __init__(self):
+        pass</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.RS232" href="#mso.triggers.RS232">RS232</a></li>
+<li><a title="mso.triggers.Timeout" href="#mso.triggers.Timeout">Timeout</a></li>
+<li><a title="mso.triggers.Runt" href="#mso.triggers.Runt">Runt</a></li>
+<li><a title="mso.triggers.Window" href="#mso.triggers.Window">Window</a></li>
+<li><a title="mso.triggers.Delay" href="#mso.triggers.Delay">Delay</a></li>
+<li><a title="mso.triggers.SetupHold" href="#mso.triggers.SetupHold">SetupHold</a></li>
+<li><a title="mso.triggers.NithEdge" href="#mso.triggers.NithEdge">NithEdge</a></li>
+<li><a title="mso.triggers.I2C" href="#mso.triggers.I2C">I2C</a></li>
+<li><a title="mso.triggers.SPI" href="#mso.triggers.SPI">SPI</a></li>
+<li><a title="mso.triggers.CAN" href="#mso.triggers.CAN">CAN</a></li>
+<li><a title="mso.triggers.FlexRay" href="#mso.triggers.FlexRay">FlexRay</a></li>
+<li><a title="mso.triggers.LIN" href="#mso.triggers.LIN">LIN</a></li>
 </ul>
 </dd>
 <dt id="mso.triggers.TriggerFactory"><code class="flex name class">
@@ -966,10 +1467,6 @@ D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel
 
     factory = staticmethod(factory)</code></pre>
 </details>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="mso.triggers.RS232" href="#mso.triggers.RS232">RS232</a></li>
-</ul>
 <h3>Static methods</h3>
 <dl>
 <dt id="mso.triggers.TriggerFactory.factory"><code class="name flex">
@@ -1007,6 +1504,40 @@ D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel
 </dd>
 </dl>
 </dd>
+<dt id="mso.triggers.Window"><code class="flex name class">
+<span>class <span class="ident">Window</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents Window trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>window trigger object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Window(Trigger):
+    &#34;&#34;&#34;Class represents Window trigger
+
+        Args:
+            instr (obj): vx11 instance
+        Returns:
+            object: window trigger object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -1023,6 +1554,24 @@ D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="mso.triggers.CAN" href="#mso.triggers.CAN">CAN</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.Delay" href="#mso.triggers.Delay">Delay</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.FlexRay" href="#mso.triggers.FlexRay">FlexRay</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.I2C" href="#mso.triggers.I2C">I2C</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.LIN" href="#mso.triggers.LIN">LIN</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.NithEdge" href="#mso.triggers.NithEdge">NithEdge</a></code></h4>
+</li>
 <li>
 <h4><code><a title="mso.triggers.RS232" href="#mso.triggers.RS232">RS232</a></code></h4>
 <ul class="two-column">
@@ -1049,10 +1598,28 @@ D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel
 </ul>
 </li>
 <li>
+<h4><code><a title="mso.triggers.Runt" href="#mso.triggers.Runt">Runt</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.SPI" href="#mso.triggers.SPI">SPI</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.SetupHold" href="#mso.triggers.SetupHold">SetupHold</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.Timeout" href="#mso.triggers.Timeout">Timeout</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.triggers.Trigger" href="#mso.triggers.Trigger">Trigger</a></code></h4>
+</li>
+<li>
 <h4><code><a title="mso.triggers.TriggerFactory" href="#mso.triggers.TriggerFactory">TriggerFactory</a></code></h4>
 <ul class="">
 <li><code><a title="mso.triggers.TriggerFactory.factory" href="#mso.triggers.TriggerFactory.factory">factory</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="mso.triggers.Window" href="#mso.triggers.Window">Window</a></code></h4>
 </li>
 </ul>
 </li>

@@ -265,3 +265,107 @@ class RS232(Bus):
     
     def _setBoud(self):
         print("Boud set", self.busNum)
+    
+class Parallel(Bus):
+    """Class represents Parallel decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    """
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class I2C(Bus):
+    """Class represents I2C decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    """
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class SPI(Bus):
+    """Class represents SPI decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    """
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class LIN(Bus):
+    """Class represents Lin decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    """
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class CAN(Bus):
+    """Class represents CAN decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    """
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class FlexRay(Bus):
+    """Class represents FlexRay decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    """
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class I2S(Bus):
+    """Class represents I2S decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    """
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class Bus1553B(Bus):
+    """Class represents 1553B decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    """
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum

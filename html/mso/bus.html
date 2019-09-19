@@ -288,7 +288,111 @@ class RS232(Bus):
         pass
     
     def _setBoud(self):
-        print(&#34;Boud set&#34;, self.busNum)</code></pre>
+        print(&#34;Boud set&#34;, self.busNum)
+    
+class Parallel(Bus):
+    &#34;&#34;&#34;Class represents Parallel decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class I2C(Bus):
+    &#34;&#34;&#34;Class represents I2C decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class SPI(Bus):
+    &#34;&#34;&#34;Class represents SPI decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class LIN(Bus):
+    &#34;&#34;&#34;Class represents Lin decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class CAN(Bus):
+    &#34;&#34;&#34;Class represents CAN decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class FlexRay(Bus):
+    &#34;&#34;&#34;Class represents FlexRay decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class I2S(Bus):
+    &#34;&#34;&#34;Class represents I2S decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+
+class Bus1553B(Bus):
+    &#34;&#34;&#34;Class represents 1553B decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
 </details>
 </section>
 <section>
@@ -546,6 +650,14 @@ class RS232(Bus):
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="mso.bus.RS232" href="#mso.bus.RS232">RS232</a></li>
+<li><a title="mso.bus.Parallel" href="#mso.bus.Parallel">Parallel</a></li>
+<li><a title="mso.bus.I2C" href="#mso.bus.I2C">I2C</a></li>
+<li><a title="mso.bus.SPI" href="#mso.bus.SPI">SPI</a></li>
+<li><a title="mso.bus.LIN" href="#mso.bus.LIN">LIN</a></li>
+<li><a title="mso.bus.CAN" href="#mso.bus.CAN">CAN</a></li>
+<li><a title="mso.bus.FlexRay" href="#mso.bus.FlexRay">FlexRay</a></li>
+<li><a title="mso.bus.I2S" href="#mso.bus.I2S">I2S</a></li>
+<li><a title="mso.bus.Bus1553B" href="#mso.bus.Bus1553B">Bus1553B</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -824,6 +936,63 @@ str: current position of decoder bus on screen</p></section>
 </dd>
 </dl>
 </dd>
+<dt id="mso.bus.Bus1553B"><code class="flex name class">
+<span>class <span class="ident">Bus1553B</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents 1553B decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Bus1553B(Bus):
+    &#34;&#34;&#34;Class represents 1553B decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mso.bus.BusFactory"><code class="flex name class">
 <span>class <span class="ident">BusFactory</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -879,6 +1048,348 @@ str: current position of decoder bus on screen</p></section>
 </details>
 </dd>
 </dl>
+</dd>
+<dt id="mso.bus.CAN"><code class="flex name class">
+<span>class <span class="ident">CAN</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents CAN decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class CAN(Bus):
+    &#34;&#34;&#34;Class represents CAN decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mso.bus.FlexRay"><code class="flex name class">
+<span>class <span class="ident">FlexRay</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents FlexRay decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FlexRay(Bus):
+    &#34;&#34;&#34;Class represents FlexRay decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mso.bus.I2C"><code class="flex name class">
+<span>class <span class="ident">I2C</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents I2C decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class I2C(Bus):
+    &#34;&#34;&#34;Class represents I2C decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mso.bus.I2S"><code class="flex name class">
+<span>class <span class="ident">I2S</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents I2S decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class I2S(Bus):
+    &#34;&#34;&#34;Class represents I2S decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mso.bus.LIN"><code class="flex name class">
+<span>class <span class="ident">LIN</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents Lin decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LIN(Bus):
+    &#34;&#34;&#34;Class represents Lin decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mso.bus.Parallel"><code class="flex name class">
+<span>class <span class="ident">Parallel</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents Parallel decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Parallel(Bus):
+    &#34;&#34;&#34;Class represents Parallel decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="mso.bus.RS232"><code class="flex name class">
 <span>class <span class="ident">RS232</span></span>
@@ -943,6 +1454,63 @@ str: current position of decoder bus on screen</p></section>
 </li>
 </ul>
 </dd>
+<dt id="mso.bus.SPI"><code class="flex name class">
+<span>class <span class="ident">SPI</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents SPI decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SPI(Bus):
+    &#34;&#34;&#34;Class represents SPI decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -977,13 +1545,37 @@ str: current position of decoder bus on screen</p></section>
 </ul>
 </li>
 <li>
+<h4><code><a title="mso.bus.Bus1553B" href="#mso.bus.Bus1553B">Bus1553B</a></code></h4>
+</li>
+<li>
 <h4><code><a title="mso.bus.BusFactory" href="#mso.bus.BusFactory">BusFactory</a></code></h4>
 <ul class="">
 <li><code><a title="mso.bus.BusFactory.factory" href="#mso.bus.BusFactory.factory">factory</a></code></li>
 </ul>
 </li>
 <li>
+<h4><code><a title="mso.bus.CAN" href="#mso.bus.CAN">CAN</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.bus.FlexRay" href="#mso.bus.FlexRay">FlexRay</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.bus.I2C" href="#mso.bus.I2C">I2C</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.bus.I2S" href="#mso.bus.I2S">I2S</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.bus.LIN" href="#mso.bus.LIN">LIN</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.bus.Parallel" href="#mso.bus.Parallel">Parallel</a></code></h4>
+</li>
+<li>
 <h4><code><a title="mso.bus.RS232" href="#mso.bus.RS232">RS232</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mso.bus.SPI" href="#mso.bus.SPI">SPI</a></code></h4>
 </li>
 </ul>
 </li>
