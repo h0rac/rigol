@@ -3,7 +3,7 @@ import os
 import json
 import sys
 
-with open("{}/rigol/bus.json".format(os.path.dirname(os.getcwd())), 'r') as f:
+with open("{}/rigol/json/decoder/bus.json".format(os.path.dirname(os.getcwd())), 'r') as f:
     bus = json.load(f)
 
 class BusFactory(object):
@@ -18,6 +18,7 @@ class Bus():
     def __init__(self, instr):
         self.instr = instr
         self.busNum = None
+        self.ttype = "tx"
     
     def getMode(self):
         if not self.busNum:
@@ -66,7 +67,12 @@ class Bus():
             print("First bus type and number need to be set")
             sys.exit(0)
         return self.instr.ask(":BUS{0}:POSition?".format(self.busNum))
-
+     
+    def getThreshold(self, ttype="tx"):
+        if not self.busNum:
+            print("First bus type and number need to be set")
+            sys.exit(0)
+        return self.instr.ask(":BUS{0}:THReshold? {1}".format(self.busNum, ttype))
     
     def setBus(self, busNum, busType):
         if busNum > 0 and busNum <= 4:
@@ -111,21 +117,30 @@ class Bus():
         else:
             print("Device support only 4 buses")
     
-    def setup(self, toggle=False, labelStatus=False, format="ascii", position=0):
+    def setThreshold(self, threshold, ttype):
+        if self.busNum > 0 and self.busNum <= 4:
+            self.ttype = ttype
+            self.instr.write(":BUS{0}:THReshold {1},{2}".format(self.busNum, threshold, bus['threshold'][ttype.lower()]))
+        else:
+            print("Device support only 4 buses")
+    
+    def setup(self, toggle=False, toggleLabel=False, format="ascii", position=0, threshold=0.0, ttype="tx"):
         self.toggle(toggle)
-        self.toggleLabel(labelStatus)
+        self.toggleLabel(toggleLabel)
         self.setDataformat(format)
         self.setPosition(position)
+        self.setThreshold(threshold, ttype)
     
-    def getCurrentSetup(self):
+    def getCurrentSetup(self, ):
         return {"mode":self.getMode(), "display":self.getBusStatus(), "format":self.getBusDataFormat(), 
-        "labelStatus":self.getBusLabelStatus(),
+        "toggleLabel":self.getBusLabelStatus(),
         "position":self.getPosition(),
         "eventTable":{
             "event":self.getEventTableStatus(),
             "format":self.getEventTableFormat(),
             "view":self.getEventTableView()
-            }
+            },
+        "threshold":self.getThreshold()
         }
     
     def toggleEventTable(self, toggle=False, format="ascii", view="packets"):
@@ -147,6 +162,10 @@ class RS232Bus(Bus):
     def __init__(self, instr, busNum):
         self.instr = instr
         self.busNum = busNum
+    
+    def setRXSource(self, src):
+        pass
+
     
     def setBoud(self):
         print("Boud set", self.busNum)

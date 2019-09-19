@@ -2,7 +2,7 @@ import json
 import os
 import sys
 
-with open("{}/rigol/rs232.json".format(os.path.dirname(os.getcwd())), 'r') as f:
+with open("{}/rigol/json/trigger/rs232.json".format(os.path.dirname(os.getcwd())), 'r') as f:
     rs232 = json.load(f)
 
 class TriggerFactory(object):

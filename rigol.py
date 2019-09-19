@@ -1,6 +1,7 @@
 import vxi11
 import json
 import sys
+import os
 
 from mso.triggers import TriggerFactory
 from mso.system import System
@@ -8,7 +9,7 @@ from mso.bus import Bus, BusFactory
 
 sweap = None
 
-with open('trigger.json', 'r') as f:
+with open('{}/rigol/json/trigger/trigger.json'.format(os.path.dirname(os.getcwd())), 'r') as f:
     sweap = json.load(f)
 
 class RigolMSO():        

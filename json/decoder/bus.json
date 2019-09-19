@@ -10,6 +10,20 @@
         "flexray": "FLEXray",
         "m1553": "M1553"
     },
+    "threshold": {
+        "pal": "PAL",
+        "tx": "TX",
+        "rx": "RX",
+        "scl": "SCL",
+        "sda": "SDA",
+        "cs": "CS",
+        "clk": "CLK",
+        "miso": "MISO",
+        "mosi": "MOSI",
+        "lin": "LIN",
+        "can": "CAN",
+        "cansub1": "CANSub1"
+    },
     "format": {
         "ascii": "ASCii",
         "hex": "HEX",
