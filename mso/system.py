@@ -9,7 +9,7 @@ class System():
         Args:
             instr (obj): vx11 instance object
         Returns:
-            object: rigol object
+            object: system object
     """       
     def __init__(self, instr):
         self.instr = instr
