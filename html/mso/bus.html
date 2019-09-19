@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>mso.bus API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mso.bus</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from abc import ABC, abstractmethod
+import os
+import json
+import sys
+
+with open(&#34;{}/rigol/json/decoder/bus.json&#34;.format(os.path.dirname(os.getcwd())), &#39;r&#39;) as f:
+    bus = json.load(f)
+
+class BusFactory(object):
+    &#34;&#34;&#34;Class create decoder objects base on type
+    &#34;&#34;&#34;
+
+    def factory(type, instr, busNum):
+        &#34;&#34;&#34;Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: decoder object base on type
+        &#34;&#34;&#34;
+        if type == &#34;RS232&#34;:
+            return RS232Bus(instr, busNum)
+    factory = staticmethod(factory)
+
+class Bus():
+    &#34;&#34;&#34;Decoder bus class
+
+        Args:
+            instr (obj): vx11 instance
+
+        Returns:
+            object: main decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+        self.busNum = None
+        self.ttype = &#34;tx&#34;
+    
+    def getMode(self):
+        &#34;&#34;&#34;Returns:
+            str: selcted decoder bus mode
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:MODE?&#34;.format(self.busNum))
+    
+    def getBusStatus(self):
+        &#34;&#34;&#34;Returns:
+            str: 0|1 indicate ON/OFF for decoder bus
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:DISPlay?&#34;.format(self.busNum))
+    
+    def getBusDataFormat(self):
+        &#34;&#34;&#34;Returns:
+            str: data display format for bus
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:FORMat?&#34;.format(self.busNum))
+    
+    def getBusLabelStatus(self):
+        &#34;&#34;&#34;Returns:
+            str: 0|1 indicate ON/OFF for decoder bus label
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:LABel?&#34;.format(self.busNum))
+    
+    def getEventTableStatus(self):
+        &#34;&#34;&#34;Returns:
+            str: 0|1 indicate ON/OFF for decoder event table
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:EVENt?&#34;.format(self.busNum))
+    
+    def getEventTableFormat(self):
+        &#34;&#34;&#34;Returns:
+            str: format for event table data
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:EVENt:FORMat?&#34;.format(self.busNum))
+    
+    def getEventTableView(self):
+        &#34;&#34;&#34;Returns:
+            str: event table view
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:EVENt:VIEW?&#34;.format(self.busNum))
+    
+    def getPosition(self):
+        &#34;&#34;&#34;Returns:
+            str: current position of decoder bus on screen
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:POSition?&#34;.format(self.busNum))
+     
+    def getThreshold(self, ttype=&#34;tx&#34;):
+        &#34;&#34;&#34;
+        Args:
+            ttype (str): line for which threshold should be enabled
+        Returns:
+            str: threshold value
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:THReshold? {1}&#34;.format(self.busNum, ttype))
+    
+    def setBus(self, busNum=1, busType=&#34;rs232&#34;):
+        &#34;&#34;&#34;Get bus number and type and set decoder bus
+        Args:
+            busNum (int): bus number 1|2|3|4
+            busType (str): parallel|rs232|spi|iic|iis|lib|can|flexray|m1553
+        &#34;&#34;&#34;
+        if busNum &gt; 0 and busNum &lt;= 4:
+            self.busNum = busNum
+            self.instr.write(&#34;:BUS{0}:MODE {1}&#34;.format(str(busNum), bus[&#39;mode&#39;][busType.lower()]))
+        else:
+            print(&#34;Device support only 4 buses&#34;)
+            sys.exit()
+    
+    def toggle(self, toggle=False):
+        &#34;&#34;&#34;Enable bus decoder base on status
+        Args:
+            toggle (bool): True|False
+        &#34;&#34;&#34;
+        if toggle:
+            if self.busNum &gt; 0 and self.busNum &lt;= 4:
+                self.instr.write(&#34;:BUS{0}:DISPlay ON&#34;.format(self.busNum))
+        elif not toggle:
+            if self.busNum &gt; 0 and self.busNum &lt;= 4:
+                self.instr.write(&#34;:BUS{0}:DISPlay OFF&#34;.format(self.busNum))
+        else:
+            print(&#34;Expect &#39;True&#39; or &#39;False&#39; to toggle bus&#39;&#34;)
+    
+    def toggleLabel(self, toggle=False):
+        &#34;&#34;&#34;Enable bus decoder label base on toggle 
+        Args:
+            toggle (bool): True|False
+        &#34;&#34;&#34;
+        if toggle == True:
+            if self.busNum &gt; 0 and self.busNum &lt;= 4:
+                self.instr.write(&#34;:BUS{0}:LABel ON&#34;.format(self.busNum))
+        elif toggle == False:
+            if self.busNum &gt; 0 and self.busNum &lt;= 4:
+                self.instr.write(&#34;:BUS{0}:LABel OFF&#34;.format(self.busNum))
+        else:
+            print(&#34;Expect &#39;True&#39; or &#39;False to toggle bus label&#39;&#34;)
+    
+    def setDataformat(self, format):
+        &#34;&#34;&#34;Enable bus decoder data format
+        Args:
+            format (str): ascii|hex|dec|bin
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:BUS{0}:FORMat {1}&#34;.format(self.busNum, bus[&#39;format&#39;][format.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported data format: &#34;, err)
+    
+    def setPosition(self, pos):
+        &#34;&#34;&#34;Set bus decoder position
+        Args:
+            pos (int): pos &gt;= -167 and pos &lt;=217
+        &#34;&#34;&#34;
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            if pos &gt;=-167 and pos &lt;=217:
+                 self.instr.write(&#34;:BUS{0}:POSition {1}&#34;.format(self.busNum, pos))
+            else:
+                print(&#34;Expect pos between -167 and 217&#34;)
+        else:
+            print(&#34;Device support only 4 buses&#34;)
+    
+    def setThreshold(self, threshold, ttype):
+        &#34;&#34;&#34;Set bus decoder threshold value to proper line type
+        Args:
+            threshold (str): value that represents voltage level, accept extension kV|uV|mV|V
+            ttype (str): pal|tx|rx|scl|sda|cs|clk|miso|mosi|lin|can|cansub1
+        &#34;&#34;&#34;
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            self.ttype = ttype
+            self.instr.write(&#34;:BUS{0}:THReshold {1},{2}&#34;.format(self.busNum, threshold, bus[&#39;threshold&#39;][ttype.lower()]))
+        else:
+            print(&#34;Device support only 4 buses&#34;)
+    
+    def setup(self, toggle=False, toggleLabel=False, format=&#34;ascii&#34;, position=0, threshold=0.0, ttype=&#34;tx&#34;):
+        &#34;&#34;&#34;Set bus decoder in single function
+        Args:
+            toggle (bool): enable bus decoder
+            toggleLabel (bool): enable bus decoder label display
+            format (str): defines format data to display
+            position (str): defines position of decoder line on screen
+            threshold (str): voltage level 
+            ttype (str): type of line
+        &#34;&#34;&#34;
+        self.toggle(toggle)
+        self.toggleLabel(toggleLabel)
+        self.setDataformat(format)
+        self.setPosition(position)
+        self.setThreshold(threshold, ttype)
+    
+    def getCurrentSetup(self):
+        &#34;&#34;&#34;Returns:
+            dict: dictionary of bus decoder setup represented by key,value pair
+        &#34;&#34;&#34;
+        return {&#34;mode&#34;:self.getMode(), &#34;display&#34;:self.getBusStatus(), &#34;format&#34;:self.getBusDataFormat(), 
+        &#34;toggleLabel&#34;:self.getBusLabelStatus(),
+        &#34;position&#34;:self.getPosition(),
+        &#34;eventTable&#34;:{
+            &#34;event&#34;:self.getEventTableStatus(),
+            &#34;format&#34;:self.getEventTableFormat(),
+            &#34;view&#34;:self.getEventTableView()
+            },
+        &#34;threshold&#34;:self.getThreshold()
+        }
+    
+    def toggleEventTable(self, toggle=False, format=&#34;ascii&#34;, view=&#34;packets&#34;):
+        &#34;&#34;&#34;Set bus decoder event table
+        Args:
+            toggle (bool): enable or disable event table on screen
+            format (str): data format to display for event table
+            view (str): default view for event table
+        &#34;&#34;&#34;
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            if toggle == True:
+                self.instr.write(&#34;:BUS{0}:EVENt ON&#34;.format(self.busNum))
+                try:
+                    self.instr.write(&#34;:BUS{0}:EVENt:FORMat {1}&#34;.format(self.busNum, bus[&#39;event&#39;][&#39;format&#39;][format]))
+                    self.instr.write(&#34;:BUS{0}:EVENt:VIEW {1}&#34;.format(self.busNum, bus[&#39;event&#39;][&#39;view&#39;][view]))
+                except KeyError as err:
+                    print(&#34;Unsupported key: &#34;, err)
+            elif toggle == False:
+                self.instr.write(&#34;:BUS{0}:EVENt OFF&#34;.format(self.busNum))
+            else:
+                print(&#34;Unsupported toggle value, expect True or False&#34;)
+
+
+class RS232Bus(Bus):
+    &#34;&#34;&#34;Class represents rs232 decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+    
+    def setRXSource(self, src):
+        pass
+    
+    def setBoud(self):
+        print(&#34;Boud set&#34;, self.busNum)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="mso.bus.Bus"><code class="flex name class">
+<span>class <span class="ident">Bus</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Decoder bus class</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>main decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Bus():
+    &#34;&#34;&#34;Decoder bus class
+
+        Args:
+            instr (obj): vx11 instance
+
+        Returns:
+            object: main decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr):
+        self.instr = instr
+        self.busNum = None
+        self.ttype = &#34;tx&#34;
+    
+    def getMode(self):
+        &#34;&#34;&#34;Returns:
+            str: selcted decoder bus mode
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:MODE?&#34;.format(self.busNum))
+    
+    def getBusStatus(self):
+        &#34;&#34;&#34;Returns:
+            str: 0|1 indicate ON/OFF for decoder bus
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:DISPlay?&#34;.format(self.busNum))
+    
+    def getBusDataFormat(self):
+        &#34;&#34;&#34;Returns:
+            str: data display format for bus
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:FORMat?&#34;.format(self.busNum))
+    
+    def getBusLabelStatus(self):
+        &#34;&#34;&#34;Returns:
+            str: 0|1 indicate ON/OFF for decoder bus label
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:LABel?&#34;.format(self.busNum))
+    
+    def getEventTableStatus(self):
+        &#34;&#34;&#34;Returns:
+            str: 0|1 indicate ON/OFF for decoder event table
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:EVENt?&#34;.format(self.busNum))
+    
+    def getEventTableFormat(self):
+        &#34;&#34;&#34;Returns:
+            str: format for event table data
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:EVENt:FORMat?&#34;.format(self.busNum))
+    
+    def getEventTableView(self):
+        &#34;&#34;&#34;Returns:
+            str: event table view
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:EVENt:VIEW?&#34;.format(self.busNum))
+    
+    def getPosition(self):
+        &#34;&#34;&#34;Returns:
+            str: current position of decoder bus on screen
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:POSition?&#34;.format(self.busNum))
+     
+    def getThreshold(self, ttype=&#34;tx&#34;):
+        &#34;&#34;&#34;
+        Args:
+            ttype (str): line for which threshold should be enabled
+        Returns:
+            str: threshold value
+        &#34;&#34;&#34;
+        if not self.busNum:
+            print(&#34;First bus type and number need to be set&#34;)
+            sys.exit(0)
+        return self.instr.ask(&#34;:BUS{0}:THReshold? {1}&#34;.format(self.busNum, ttype))
+    
+    def setBus(self, busNum=1, busType=&#34;rs232&#34;):
+        &#34;&#34;&#34;Get bus number and type and set decoder bus
+        Args:
+            busNum (int): bus number 1|2|3|4
+            busType (str): parallel|rs232|spi|iic|iis|lib|can|flexray|m1553
+        &#34;&#34;&#34;
+        if busNum &gt; 0 and busNum &lt;= 4:
+            self.busNum = busNum
+            self.instr.write(&#34;:BUS{0}:MODE {1}&#34;.format(str(busNum), bus[&#39;mode&#39;][busType.lower()]))
+        else:
+            print(&#34;Device support only 4 buses&#34;)
+            sys.exit()
+    
+    def toggle(self, toggle=False):
+        &#34;&#34;&#34;Enable bus decoder base on status
+        Args:
+            toggle (bool): True|False
+        &#34;&#34;&#34;
+        if toggle:
+            if self.busNum &gt; 0 and self.busNum &lt;= 4:
+                self.instr.write(&#34;:BUS{0}:DISPlay ON&#34;.format(self.busNum))
+        elif not toggle:
+            if self.busNum &gt; 0 and self.busNum &lt;= 4:
+                self.instr.write(&#34;:BUS{0}:DISPlay OFF&#34;.format(self.busNum))
+        else:
+            print(&#34;Expect &#39;True&#39; or &#39;False&#39; to toggle bus&#39;&#34;)
+    
+    def toggleLabel(self, toggle=False):
+        &#34;&#34;&#34;Enable bus decoder label base on toggle 
+        Args:
+            toggle (bool): True|False
+        &#34;&#34;&#34;
+        if toggle == True:
+            if self.busNum &gt; 0 and self.busNum &lt;= 4:
+                self.instr.write(&#34;:BUS{0}:LABel ON&#34;.format(self.busNum))
+        elif toggle == False:
+            if self.busNum &gt; 0 and self.busNum &lt;= 4:
+                self.instr.write(&#34;:BUS{0}:LABel OFF&#34;.format(self.busNum))
+        else:
+            print(&#34;Expect &#39;True&#39; or &#39;False to toggle bus label&#39;&#34;)
+    
+    def setDataformat(self, format):
+        &#34;&#34;&#34;Enable bus decoder data format
+        Args:
+            format (str): ascii|hex|dec|bin
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:BUS{0}:FORMat {1}&#34;.format(self.busNum, bus[&#39;format&#39;][format.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported data format: &#34;, err)
+    
+    def setPosition(self, pos):
+        &#34;&#34;&#34;Set bus decoder position
+        Args:
+            pos (int): pos &gt;= -167 and pos &lt;=217
+        &#34;&#34;&#34;
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            if pos &gt;=-167 and pos &lt;=217:
+                 self.instr.write(&#34;:BUS{0}:POSition {1}&#34;.format(self.busNum, pos))
+            else:
+                print(&#34;Expect pos between -167 and 217&#34;)
+        else:
+            print(&#34;Device support only 4 buses&#34;)
+    
+    def setThreshold(self, threshold, ttype):
+        &#34;&#34;&#34;Set bus decoder threshold value to proper line type
+        Args:
+            threshold (str): value that represents voltage level, accept extension kV|uV|mV|V
+            ttype (str): pal|tx|rx|scl|sda|cs|clk|miso|mosi|lin|can|cansub1
+        &#34;&#34;&#34;
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            self.ttype = ttype
+            self.instr.write(&#34;:BUS{0}:THReshold {1},{2}&#34;.format(self.busNum, threshold, bus[&#39;threshold&#39;][ttype.lower()]))
+        else:
+            print(&#34;Device support only 4 buses&#34;)
+    
+    def setup(self, toggle=False, toggleLabel=False, format=&#34;ascii&#34;, position=0, threshold=0.0, ttype=&#34;tx&#34;):
+        &#34;&#34;&#34;Set bus decoder in single function
+        Args:
+            toggle (bool): enable bus decoder
+            toggleLabel (bool): enable bus decoder label display
+            format (str): defines format data to display
+            position (str): defines position of decoder line on screen
+            threshold (str): voltage level 
+            ttype (str): type of line
+        &#34;&#34;&#34;
+        self.toggle(toggle)
+        self.toggleLabel(toggleLabel)
+        self.setDataformat(format)
+        self.setPosition(position)
+        self.setThreshold(threshold, ttype)
+    
+    def getCurrentSetup(self):
+        &#34;&#34;&#34;Returns:
+            dict: dictionary of bus decoder setup represented by key,value pair
+        &#34;&#34;&#34;
+        return {&#34;mode&#34;:self.getMode(), &#34;display&#34;:self.getBusStatus(), &#34;format&#34;:self.getBusDataFormat(), 
+        &#34;toggleLabel&#34;:self.getBusLabelStatus(),
+        &#34;position&#34;:self.getPosition(),
+        &#34;eventTable&#34;:{
+            &#34;event&#34;:self.getEventTableStatus(),
+            &#34;format&#34;:self.getEventTableFormat(),
+            &#34;view&#34;:self.getEventTableView()
+            },
+        &#34;threshold&#34;:self.getThreshold()
+        }
+    
+    def toggleEventTable(self, toggle=False, format=&#34;ascii&#34;, view=&#34;packets&#34;):
+        &#34;&#34;&#34;Set bus decoder event table
+        Args:
+            toggle (bool): enable or disable event table on screen
+            format (str): data format to display for event table
+            view (str): default view for event table
+        &#34;&#34;&#34;
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            if toggle == True:
+                self.instr.write(&#34;:BUS{0}:EVENt ON&#34;.format(self.busNum))
+                try:
+                    self.instr.write(&#34;:BUS{0}:EVENt:FORMat {1}&#34;.format(self.busNum, bus[&#39;event&#39;][&#39;format&#39;][format]))
+                    self.instr.write(&#34;:BUS{0}:EVENt:VIEW {1}&#34;.format(self.busNum, bus[&#39;event&#39;][&#39;view&#39;][view]))
+                except KeyError as err:
+                    print(&#34;Unsupported key: &#34;, err)
+            elif toggle == False:
+                self.instr.write(&#34;:BUS{0}:EVENt OFF&#34;.format(self.busNum))
+            else:
+                print(&#34;Unsupported toggle value, expect True or False&#34;)</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mso.bus.RS232Bus" href="#mso.bus.RS232Bus">RS232Bus</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="mso.bus.Bus.getBusDataFormat"><code class="name flex">
+<span>def <span class="ident">getBusDataFormat</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: data display format for bus</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getBusDataFormat(self):
+    &#34;&#34;&#34;Returns:
+        str: data display format for bus
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:FORMat?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getBusLabelStatus"><code class="name flex">
+<span>def <span class="ident">getBusLabelStatus</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: 0|1 indicate ON/OFF for decoder bus label</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getBusLabelStatus(self):
+    &#34;&#34;&#34;Returns:
+        str: 0|1 indicate ON/OFF for decoder bus label
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:LABel?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getBusStatus"><code class="name flex">
+<span>def <span class="ident">getBusStatus</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: 0|1 indicate ON/OFF for decoder bus</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getBusStatus(self):
+    &#34;&#34;&#34;Returns:
+        str: 0|1 indicate ON/OFF for decoder bus
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:DISPlay?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getCurrentSetup"><code class="name flex">
+<span>def <span class="ident">getCurrentSetup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+dict: dictionary of bus decoder setup represented by key,value pair</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getCurrentSetup(self):
+    &#34;&#34;&#34;Returns:
+        dict: dictionary of bus decoder setup represented by key,value pair
+    &#34;&#34;&#34;
+    return {&#34;mode&#34;:self.getMode(), &#34;display&#34;:self.getBusStatus(), &#34;format&#34;:self.getBusDataFormat(), 
+    &#34;toggleLabel&#34;:self.getBusLabelStatus(),
+    &#34;position&#34;:self.getPosition(),
+    &#34;eventTable&#34;:{
+        &#34;event&#34;:self.getEventTableStatus(),
+        &#34;format&#34;:self.getEventTableFormat(),
+        &#34;view&#34;:self.getEventTableView()
+        },
+    &#34;threshold&#34;:self.getThreshold()
+    }</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getEventTableFormat"><code class="name flex">
+<span>def <span class="ident">getEventTableFormat</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: format for event table data</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getEventTableFormat(self):
+    &#34;&#34;&#34;Returns:
+        str: format for event table data
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:EVENt:FORMat?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getEventTableStatus"><code class="name flex">
+<span>def <span class="ident">getEventTableStatus</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: 0|1 indicate ON/OFF for decoder event table</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getEventTableStatus(self):
+    &#34;&#34;&#34;Returns:
+        str: 0|1 indicate ON/OFF for decoder event table
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:EVENt?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getEventTableView"><code class="name flex">
+<span>def <span class="ident">getEventTableView</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: event table view</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getEventTableView(self):
+    &#34;&#34;&#34;Returns:
+        str: event table view
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:EVENt:VIEW?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getMode"><code class="name flex">
+<span>def <span class="ident">getMode</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: selcted decoder bus mode</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getMode(self):
+    &#34;&#34;&#34;Returns:
+        str: selcted decoder bus mode
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:MODE?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getPosition"><code class="name flex">
+<span>def <span class="ident">getPosition</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: current position of decoder bus on screen</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getPosition(self):
+    &#34;&#34;&#34;Returns:
+        str: current position of decoder bus on screen
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:POSition?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.getThreshold"><code class="name flex">
+<span>def <span class="ident">getThreshold</span></span>(<span>self, ttype='tx')</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>ttype</code></strong> :&ensp;<code>str</code></dt>
+<dd>line for which threshold should be enabled</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>str</code></strong></dt>
+<dd>threshold value</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getThreshold(self, ttype=&#34;tx&#34;):
+    &#34;&#34;&#34;
+    Args:
+        ttype (str): line for which threshold should be enabled
+    Returns:
+        str: threshold value
+    &#34;&#34;&#34;
+    if not self.busNum:
+        print(&#34;First bus type and number need to be set&#34;)
+        sys.exit(0)
+    return self.instr.ask(&#34;:BUS{0}:THReshold? {1}&#34;.format(self.busNum, ttype))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.setBus"><code class="name flex">
+<span>def <span class="ident">setBus</span></span>(<span>self, busNum=1, busType='rs232')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get bus number and type and set decoder bus</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>bus number 1|2|3|4</dd>
+<dt><strong><code>busType</code></strong> :&ensp;<code>str</code></dt>
+<dd>parallel|rs232|spi|iic|iis|lib|can|flexray|m1553</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setBus(self, busNum=1, busType=&#34;rs232&#34;):
+    &#34;&#34;&#34;Get bus number and type and set decoder bus
+    Args:
+        busNum (int): bus number 1|2|3|4
+        busType (str): parallel|rs232|spi|iic|iis|lib|can|flexray|m1553
+    &#34;&#34;&#34;
+    if busNum &gt; 0 and busNum &lt;= 4:
+        self.busNum = busNum
+        self.instr.write(&#34;:BUS{0}:MODE {1}&#34;.format(str(busNum), bus[&#39;mode&#39;][busType.lower()]))
+    else:
+        print(&#34;Device support only 4 buses&#34;)
+        sys.exit()</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.setDataformat"><code class="name flex">
+<span>def <span class="ident">setDataformat</span></span>(<span>self, format)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Enable bus decoder data format</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
+<dd>ascii|hex|dec|bin</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setDataformat(self, format):
+    &#34;&#34;&#34;Enable bus decoder data format
+    Args:
+        format (str): ascii|hex|dec|bin
+    &#34;&#34;&#34;
+    try:
+        self.instr.write(&#34;:BUS{0}:FORMat {1}&#34;.format(self.busNum, bus[&#39;format&#39;][format.lower()]))
+    except KeyError as err:
+        print(&#34;Unsupported data format: &#34;, err)</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.setPosition"><code class="name flex">
+<span>def <span class="ident">setPosition</span></span>(<span>self, pos)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set bus decoder position</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>pos</code></strong> :&ensp;<code>int</code></dt>
+<dd>pos &gt;= -167 and pos &lt;=217</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setPosition(self, pos):
+    &#34;&#34;&#34;Set bus decoder position
+    Args:
+        pos (int): pos &gt;= -167 and pos &lt;=217
+    &#34;&#34;&#34;
+    if self.busNum &gt; 0 and self.busNum &lt;= 4:
+        if pos &gt;=-167 and pos &lt;=217:
+             self.instr.write(&#34;:BUS{0}:POSition {1}&#34;.format(self.busNum, pos))
+        else:
+            print(&#34;Expect pos between -167 and 217&#34;)
+    else:
+        print(&#34;Device support only 4 buses&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.setThreshold"><code class="name flex">
+<span>def <span class="ident">setThreshold</span></span>(<span>self, threshold, ttype)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set bus decoder threshold value to proper line type</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>threshold</code></strong> :&ensp;<code>str</code></dt>
+<dd>value that represents voltage level, accept extension kV|uV|mV|V</dd>
+<dt><strong><code>ttype</code></strong> :&ensp;<code>str</code></dt>
+<dd>pal|tx|rx|scl|sda|cs|clk|miso|mosi|lin|can|cansub1</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setThreshold(self, threshold, ttype):
+    &#34;&#34;&#34;Set bus decoder threshold value to proper line type
+    Args:
+        threshold (str): value that represents voltage level, accept extension kV|uV|mV|V
+        ttype (str): pal|tx|rx|scl|sda|cs|clk|miso|mosi|lin|can|cansub1
+    &#34;&#34;&#34;
+    if self.busNum &gt; 0 and self.busNum &lt;= 4:
+        self.ttype = ttype
+        self.instr.write(&#34;:BUS{0}:THReshold {1},{2}&#34;.format(self.busNum, threshold, bus[&#39;threshold&#39;][ttype.lower()]))
+    else:
+        print(&#34;Device support only 4 buses&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.setup"><code class="name flex">
+<span>def <span class="ident">setup</span></span>(<span>self, toggle=False, toggleLabel=False, format='ascii', position=0, threshold=0.0, ttype='tx')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set bus decoder in single function</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>toggle</code></strong> :&ensp;<code>bool</code></dt>
+<dd>enable bus decoder</dd>
+<dt><strong><code>toggleLabel</code></strong> :&ensp;<code>bool</code></dt>
+<dd>enable bus decoder label display</dd>
+<dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
+<dd>defines format data to display</dd>
+<dt><strong><code>position</code></strong> :&ensp;<code>str</code></dt>
+<dd>defines position of decoder line on screen</dd>
+<dt><strong><code>threshold</code></strong> :&ensp;<code>str</code></dt>
+<dd>voltage level </dd>
+<dt><strong><code>ttype</code></strong> :&ensp;<code>str</code></dt>
+<dd>type of line</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setup(self, toggle=False, toggleLabel=False, format=&#34;ascii&#34;, position=0, threshold=0.0, ttype=&#34;tx&#34;):
+    &#34;&#34;&#34;Set bus decoder in single function
+    Args:
+        toggle (bool): enable bus decoder
+        toggleLabel (bool): enable bus decoder label display
+        format (str): defines format data to display
+        position (str): defines position of decoder line on screen
+        threshold (str): voltage level 
+        ttype (str): type of line
+    &#34;&#34;&#34;
+    self.toggle(toggle)
+    self.toggleLabel(toggleLabel)
+    self.setDataformat(format)
+    self.setPosition(position)
+    self.setThreshold(threshold, ttype)</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.toggle"><code class="name flex">
+<span>def <span class="ident">toggle</span></span>(<span>self, toggle=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Enable bus decoder base on status</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>toggle</code></strong> :&ensp;<code>bool</code></dt>
+<dd>True|False</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def toggle(self, toggle=False):
+    &#34;&#34;&#34;Enable bus decoder base on status
+    Args:
+        toggle (bool): True|False
+    &#34;&#34;&#34;
+    if toggle:
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            self.instr.write(&#34;:BUS{0}:DISPlay ON&#34;.format(self.busNum))
+    elif not toggle:
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            self.instr.write(&#34;:BUS{0}:DISPlay OFF&#34;.format(self.busNum))
+    else:
+        print(&#34;Expect &#39;True&#39; or &#39;False&#39; to toggle bus&#39;&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.toggleEventTable"><code class="name flex">
+<span>def <span class="ident">toggleEventTable</span></span>(<span>self, toggle=False, format='ascii', view='packets')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set bus decoder event table</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>toggle</code></strong> :&ensp;<code>bool</code></dt>
+<dd>enable or disable event table on screen</dd>
+<dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
+<dd>data format to display for event table</dd>
+<dt><strong><code>view</code></strong> :&ensp;<code>str</code></dt>
+<dd>default view for event table</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def toggleEventTable(self, toggle=False, format=&#34;ascii&#34;, view=&#34;packets&#34;):
+    &#34;&#34;&#34;Set bus decoder event table
+    Args:
+        toggle (bool): enable or disable event table on screen
+        format (str): data format to display for event table
+        view (str): default view for event table
+    &#34;&#34;&#34;
+    if self.busNum &gt; 0 and self.busNum &lt;= 4:
+        if toggle == True:
+            self.instr.write(&#34;:BUS{0}:EVENt ON&#34;.format(self.busNum))
+            try:
+                self.instr.write(&#34;:BUS{0}:EVENt:FORMat {1}&#34;.format(self.busNum, bus[&#39;event&#39;][&#39;format&#39;][format]))
+                self.instr.write(&#34;:BUS{0}:EVENt:VIEW {1}&#34;.format(self.busNum, bus[&#39;event&#39;][&#39;view&#39;][view]))
+            except KeyError as err:
+                print(&#34;Unsupported key: &#34;, err)
+        elif toggle == False:
+            self.instr.write(&#34;:BUS{0}:EVENt OFF&#34;.format(self.busNum))
+        else:
+            print(&#34;Unsupported toggle value, expect True or False&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.Bus.toggleLabel"><code class="name flex">
+<span>def <span class="ident">toggleLabel</span></span>(<span>self, toggle=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Enable bus decoder label base on toggle </p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>toggle</code></strong> :&ensp;<code>bool</code></dt>
+<dd>True|False</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def toggleLabel(self, toggle=False):
+    &#34;&#34;&#34;Enable bus decoder label base on toggle 
+    Args:
+        toggle (bool): True|False
+    &#34;&#34;&#34;
+    if toggle == True:
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            self.instr.write(&#34;:BUS{0}:LABel ON&#34;.format(self.busNum))
+    elif toggle == False:
+        if self.busNum &gt; 0 and self.busNum &lt;= 4:
+            self.instr.write(&#34;:BUS{0}:LABel OFF&#34;.format(self.busNum))
+    else:
+        print(&#34;Expect &#39;True&#39; or &#39;False to toggle bus label&#39;&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="mso.bus.BusFactory"><code class="flex name class">
+<span>class <span class="ident">BusFactory</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class create decoder objects base on type</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BusFactory(object):
+    &#34;&#34;&#34;Class create decoder objects base on type
+    &#34;&#34;&#34;
+
+    def factory(type, instr, busNum):
+        &#34;&#34;&#34;Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: decoder object base on type
+        &#34;&#34;&#34;
+        if type == &#34;RS232&#34;:
+            return RS232Bus(instr, busNum)
+    factory = staticmethod(factory)</code></pre>
+</details>
+<h3>Static methods</h3>
+<dl>
+<dt id="mso.bus.BusFactory.factory"><code class="name flex">
+<span>def <span class="ident">factory</span></span>(<span>type, instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>decoder object base on type</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def factory(type, instr, busNum):
+    &#34;&#34;&#34;Args:
+        instr (obj): vx11 instance
+        busNum (int): decoder bus number
+    Returns:
+        object: decoder object base on type
+    &#34;&#34;&#34;
+    if type == &#34;RS232&#34;:
+        return RS232Bus(instr, busNum)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="mso.bus.RS232Bus"><code class="flex name class">
+<span>class <span class="ident">RS232Bus</span></span>
+<span>(</span><span>instr, busNum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class represents rs232 decoder</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>decoder bus number</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rs232 decoder object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class RS232Bus(Bus):
+    &#34;&#34;&#34;Class represents rs232 decoder
+
+        Args:
+            instr (obj): vx11 instance
+            busNum (int): decoder bus number
+        Returns:
+            object: rs232 decoder object
+    &#34;&#34;&#34;
+    def __init__(self, instr, busNum):
+        self.instr = instr
+        self.busNum = busNum
+    
+    def setRXSource(self, src):
+        pass
+    
+    def setBoud(self):
+        print(&#34;Boud set&#34;, self.busNum)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="mso.bus.RS232Bus.setBoud"><code class="name flex">
+<span>def <span class="ident">setBoud</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setBoud(self):
+    print(&#34;Boud set&#34;, self.busNum)</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232Bus.setRXSource"><code class="name flex">
+<span>def <span class="ident">setRXSource</span></span>(<span>self, src)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setRXSource(self, src):
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setBus" href="#mso.bus.Bus.setBus">setBus</a></code></li>
+<li><code><a title="mso.bus.Bus.setDataformat" href="#mso.bus.Bus.setDataformat">setDataformat</a></code></li>
+<li><code><a title="mso.bus.Bus.setPosition" href="#mso.bus.Bus.setPosition">setPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.setThreshold" href="#mso.bus.Bus.setThreshold">setThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggle" href="#mso.bus.Bus.toggle">toggle</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleLabel" href="#mso.bus.Bus.toggleLabel">toggleLabel</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mso" href="index.html">mso</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
+<li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
+<li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
+<li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setBus" href="#mso.bus.Bus.setBus">setBus</a></code></li>
+<li><code><a title="mso.bus.Bus.setDataformat" href="#mso.bus.Bus.setDataformat">setDataformat</a></code></li>
+<li><code><a title="mso.bus.Bus.setPosition" href="#mso.bus.Bus.setPosition">setPosition</a></code></li>
+<li><code><a title="mso.bus.Bus.setThreshold" href="#mso.bus.Bus.setThreshold">setThreshold</a></code></li>
+<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
+<li><code><a title="mso.bus.Bus.toggle" href="#mso.bus.Bus.toggle">toggle</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
+<li><code><a title="mso.bus.Bus.toggleLabel" href="#mso.bus.Bus.toggleLabel">toggleLabel</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mso.bus.BusFactory" href="#mso.bus.BusFactory">BusFactory</a></code></h4>
+<ul class="">
+<li><code><a title="mso.bus.BusFactory.factory" href="#mso.bus.BusFactory.factory">factory</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mso.bus.RS232Bus" href="#mso.bus.RS232Bus">RS232Bus</a></code></h4>
+<ul class="">
+<li><code><a title="mso.bus.RS232Bus.setBoud" href="#mso.bus.RS232Bus.setBoud">setBoud</a></code></li>
+<li><code><a title="mso.bus.RS232Bus.setRXSource" href="#mso.bus.RS232Bus.setRXSource">setRXSource</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

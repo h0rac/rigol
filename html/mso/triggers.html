@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>mso.triggers API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mso.triggers</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import json 
+import os
+import sys
+
+with open(&#34;{}/rigol/json/trigger/rs232.json&#34;.format(os.path.dirname(os.getcwd())), &#39;r&#39;) as f:
+    rs232 = json.load(f)
+
+class TriggerFactory(object):
+    &#34;&#34;&#34;Produces trigger objects&#34;&#34;&#34;
+
+    def factory(type, instr):
+        &#34;&#34;&#34;Produce object base on trigger type
+
+        Args:
+            type (str): Type of trigger
+            instr (obj): vx11 instance
+
+        Returns:
+            object: Trigger object base on type
+        &#34;&#34;&#34;
+        if type == &#34;RS232&#34;:
+            return RS232(instr)
+
+    factory = staticmethod(factory)
+
+class RS232(TriggerFactory):
+    &#34;&#34;&#34;RS232 Trigger class&#34;&#34;&#34;
+
+    def __init__(self, instr):
+        &#34;&#34;&#34;
+            Args:
+                instr (obj): vx11 instance
+            
+            Returns:
+            object: RS232 trigger object   
+        &#34;&#34;&#34;
+        TriggerFactory.__init__(self)
+        self.instr = instr
+
+    def getSourceChannel(self):
+        &#34;&#34;&#34;Returns:
+            str: source trigger channel
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:SOURce?&#34;)
+
+    def getBoud(self):
+        &#34;&#34;&#34;Returns:
+            str: boud rate
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:BAUD?&#34;)
+    
+    def getVoltageLevel(self):
+        &#34;&#34;&#34;Returns:
+            str: voltage level
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:LEVel?&#34;)
+
+    def getWhen(self):
+        &#34;&#34;&#34;Returns:
+            str: when trigger will happen
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:TRIGger:RS232:WHEN?&#34;)
+    
+    def getData(self):
+        &#34;&#34;&#34;Returns:
+            str: if when is set to &#39;DATA&#39; return trigger data in decimal 0-255
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:DATA?&#34;)
+    
+    def getStopBit(self):
+        &#34;&#34;&#34;Returns:
+            str: stop bit for rs232 with values 1|1,5|2
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:TRIGger:RS232:STOP?&#34;)
+    
+    def getParity(self):
+        &#34;&#34;&#34;Returns:
+            str: parity for rs232 with values None|Odd|Even
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:PARity?&#34;)
+    
+    def getDataBits(self):
+        &#34;&#34;&#34;Returns:
+            str: data bits for rs232 with values 5|7|6|8
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:WIDTh?&#34;)
+
+    def setBoud(self, boud=9600):
+        &#34;&#34;&#34;Set boud lever for trigger
+
+        Args:
+            boud (str): baud rate for rs232
+            If the baud rate is set to a value with &#34;M&#34;, 
+            then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:BAUD {0}&#34;.format(boud))
+        except ValueError as err:
+            print(&#39;Unsupported boud:&#39;, err)
+    
+    def setVoltageLevel(self, voltage=0.0):
+        &#34;&#34;&#34;Set voltage lever for trigger
+
+        Args:
+            voltage (str): support extension with mV|uV|nV|kV|V
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:LEVel {0}&#34;.format(voltage))
+        except ValueError as err:
+            print(&#39;Unsupported voltage:&#39;, err)
+            sys.exit()
+    
+    def setSourceChannel(self, chan=&#34;chan1&#34;):
+        &#34;&#34;&#34;Set channel source for trigger
+
+        Args:
+            chan (str): source channel for trigger
+            provide as chan1, chan2... it will be convered to CHANnel1, CHANnel2 etc 
+            
+            available channels:
+            D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel3|CHANnel4
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:SOURce {0}&#34;.format(rs232[&#39;source&#39;][chan.lower()]))
+        except KeyError as err:
+            print(&#39;Unsupported channel source:&#39;, err)
+            sys.exit()
+        
+    def setWhen(self, value=&#34;data&#34;):
+        &#34;&#34;&#34;Set when trigger fire
+
+        Args:
+            when (str): start|error|cerror|data
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:WHEN {0}&#34;.format(rs232[&#39;when&#39;][value.lower()]))
+        except KeyError as err:
+            print(&#39;Unsupported when source:&#39;, err)
+    
+    def setData(self, num=10):
+        &#34;&#34;&#34;Set on which ASCII char trigger when &#34;data&#34; is set as when
+
+        Args:
+            num (int): decimal 0-255
+        &#34;&#34;&#34;
+        result = num in rs232[&#39;data&#39;]
+        if result:
+            self.instr.write(&#34;:TRIGger:RS232:DATA {0}&#34;.format(num))
+        else:
+            print(&#39;Unsupported data, accept value in range 0-255&#39;)
+    
+    def setStopBit(self, stopBit=1):
+        &#34;&#34;&#34;Set stop bit for rs232
+
+        Args:
+            stopBit (int): accepts 1|1.5|2
+        &#34;&#34;&#34;
+        result = stopBit in rs232[&#39;stopBits&#39;]
+        if result:
+            self.instr.write(&#34;:TRIGger:RS232:STOP {0}&#34;.format(stopBit))
+        else:
+            print(&#39;Unsupported value, accept 1,1.5,2&#39;)
+    
+    def setParity(self, parity=&#34;none&#34;):
+        &#34;&#34;&#34;Set stop bit for rs232
+
+        Args:
+            parity (str): accepts none|even|odd
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:PARity {0}&#34;.format(rs232[&#39;parity&#39;][parity.lower()]))
+        except KeyError as err:
+            print(&#39;Unsupported parity, accept ODD, EVEN, NONE:&#39;, err)
+    
+    def setDataBits(self, bits=8):
+        &#34;&#34;&#34;Set stop bit for rs232
+
+        Args:
+            bits (int): accepts 5|6|7|8
+        &#34;&#34;&#34;
+        result = bits in rs232[&#39;dataBits&#39;]
+        if result:
+            self.instr.write(&#34;:TRIGger:RS232:WIDTh {0}&#34;.format(bits))
+        else:
+            print(&#39;Unsupported value, accept 5,6,7 or 8&#39;)
+         
+    
+    def setup(self, src = &#34;chan1&#34;, voltage = 0.0, baud=9600, when=&#34;data&#34;,data=10, dataBits=8, stopBit=1, parity=&#34;none&#34;):
+        &#34;&#34;&#34;Set rs232 parameters in one function
+
+        Args:
+            src (str): source channel
+            voltage (str): source voltage
+            boud (str): boud rate
+            when (str): when to trigger
+            data (str): if when is data set ASCII dec value to trigger
+            dataBits (int): data bits
+            stopBit (int): stop bit
+            parity (str): parity for rs232
+        &#34;&#34;&#34;
+        self.setSourceChannel(src)
+        self.setVoltageLevel(voltage)
+        self.setBoud(baud)
+        self.setWhen(when)
+        if when == &#34;data&#34;:
+            self.setData(data)
+        self.setStopBit(stopBit)
+        self.setParity(parity)
+        self.setDataBits(dataBits)
+    
+    def restoreDefault(self):
+        &#34;&#34;&#34;Restore rs232 trigger options to default
+            
+        Returns:
+            dict: with default key,pair values
+        &#34;&#34;&#34;
+        self.setup()
+        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), &#34;when&#34;:self.getWhen(),
+        &#39;data&#39;:self.getData(), &#34;stopBit&#34;:self.getStopBit()
+         }
+
+    def getDefaults(self):
+        &#34;&#34;&#34;Returns:
+            dict: with availble default key,pair values
+        &#34;&#34;&#34;
+        return {&#39;src&#39;:&#39;chan1&#39;, &#39;voltage&#39;:0, &#39;baud&#39;:9600, &#39;when&#39;:&#34;data&#34;,&#34;data&#34;:10, &#34;dataBits&#34;:8, &#34;stopBit&#34;:1, &#34;parity&#34;:&#39;none&#39;}
+    
+    def getCurrentSetup(self):
+        &#34;&#34;&#34;Returns:
+            dict: current configuration
+        &#34;&#34;&#34;
+        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), 
+        &#39;when&#39;:self.getWhen(), &#39;data&#39;:self.getData(), &#34;dataBits&#34;:self.getDataBits(), &#34;stopBit&#34;:self.getStopBit(), &#34;parity&#34;:self.getParity()}</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="mso.triggers.RS232"><code class="flex name class">
+<span>class <span class="ident">RS232</span></span>
+<span>(</span><span>instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>RS232 Trigger class</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+<dt>Returns:</dt>
+<dt><strong><code>object</code></strong> :&ensp;<a title="mso.triggers.RS232" href="#mso.triggers.RS232"><code>RS232</code></a> <code>trigger</code> <code>object</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class RS232(TriggerFactory):
+    &#34;&#34;&#34;RS232 Trigger class&#34;&#34;&#34;
+
+    def __init__(self, instr):
+        &#34;&#34;&#34;
+            Args:
+                instr (obj): vx11 instance
+            
+            Returns:
+            object: RS232 trigger object   
+        &#34;&#34;&#34;
+        TriggerFactory.__init__(self)
+        self.instr = instr
+
+    def getSourceChannel(self):
+        &#34;&#34;&#34;Returns:
+            str: source trigger channel
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:SOURce?&#34;)
+
+    def getBoud(self):
+        &#34;&#34;&#34;Returns:
+            str: boud rate
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:BAUD?&#34;)
+    
+    def getVoltageLevel(self):
+        &#34;&#34;&#34;Returns:
+            str: voltage level
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:LEVel?&#34;)
+
+    def getWhen(self):
+        &#34;&#34;&#34;Returns:
+            str: when trigger will happen
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:TRIGger:RS232:WHEN?&#34;)
+    
+    def getData(self):
+        &#34;&#34;&#34;Returns:
+            str: if when is set to &#39;DATA&#39; return trigger data in decimal 0-255
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:DATA?&#34;)
+    
+    def getStopBit(self):
+        &#34;&#34;&#34;Returns:
+            str: stop bit for rs232 with values 1|1,5|2
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:TRIGger:RS232:STOP?&#34;)
+    
+    def getParity(self):
+        &#34;&#34;&#34;Returns:
+            str: parity for rs232 with values None|Odd|Even
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:PARity?&#34;)
+    
+    def getDataBits(self):
+        &#34;&#34;&#34;Returns:
+            str: data bits for rs232 with values 5|7|6|8
+        &#34;&#34;&#34;
+        return  self.instr.ask(&#34;:TRIGger:RS232:WIDTh?&#34;)
+
+    def setBoud(self, boud=9600):
+        &#34;&#34;&#34;Set boud lever for trigger
+
+        Args:
+            boud (str): baud rate for rs232
+            If the baud rate is set to a value with &#34;M&#34;, 
+            then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:BAUD {0}&#34;.format(boud))
+        except ValueError as err:
+            print(&#39;Unsupported boud:&#39;, err)
+    
+    def setVoltageLevel(self, voltage=0.0):
+        &#34;&#34;&#34;Set voltage lever for trigger
+
+        Args:
+            voltage (str): support extension with mV|uV|nV|kV|V
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:LEVel {0}&#34;.format(voltage))
+        except ValueError as err:
+            print(&#39;Unsupported voltage:&#39;, err)
+            sys.exit()
+    
+    def setSourceChannel(self, chan=&#34;chan1&#34;):
+        &#34;&#34;&#34;Set channel source for trigger
+
+        Args:
+            chan (str): source channel for trigger
+            provide as chan1, chan2... it will be convered to CHANnel1, CHANnel2 etc 
+            
+            available channels:
+            D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel3|CHANnel4
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:SOURce {0}&#34;.format(rs232[&#39;source&#39;][chan.lower()]))
+        except KeyError as err:
+            print(&#39;Unsupported channel source:&#39;, err)
+            sys.exit()
+        
+    def setWhen(self, value=&#34;data&#34;):
+        &#34;&#34;&#34;Set when trigger fire
+
+        Args:
+            when (str): start|error|cerror|data
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:WHEN {0}&#34;.format(rs232[&#39;when&#39;][value.lower()]))
+        except KeyError as err:
+            print(&#39;Unsupported when source:&#39;, err)
+    
+    def setData(self, num=10):
+        &#34;&#34;&#34;Set on which ASCII char trigger when &#34;data&#34; is set as when
+
+        Args:
+            num (int): decimal 0-255
+        &#34;&#34;&#34;
+        result = num in rs232[&#39;data&#39;]
+        if result:
+            self.instr.write(&#34;:TRIGger:RS232:DATA {0}&#34;.format(num))
+        else:
+            print(&#39;Unsupported data, accept value in range 0-255&#39;)
+    
+    def setStopBit(self, stopBit=1):
+        &#34;&#34;&#34;Set stop bit for rs232
+
+        Args:
+            stopBit (int): accepts 1|1.5|2
+        &#34;&#34;&#34;
+        result = stopBit in rs232[&#39;stopBits&#39;]
+        if result:
+            self.instr.write(&#34;:TRIGger:RS232:STOP {0}&#34;.format(stopBit))
+        else:
+            print(&#39;Unsupported value, accept 1,1.5,2&#39;)
+    
+    def setParity(self, parity=&#34;none&#34;):
+        &#34;&#34;&#34;Set stop bit for rs232
+
+        Args:
+            parity (str): accepts none|even|odd
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:TRIGger:RS232:PARity {0}&#34;.format(rs232[&#39;parity&#39;][parity.lower()]))
+        except KeyError as err:
+            print(&#39;Unsupported parity, accept ODD, EVEN, NONE:&#39;, err)
+    
+    def setDataBits(self, bits=8):
+        &#34;&#34;&#34;Set stop bit for rs232
+
+        Args:
+            bits (int): accepts 5|6|7|8
+        &#34;&#34;&#34;
+        result = bits in rs232[&#39;dataBits&#39;]
+        if result:
+            self.instr.write(&#34;:TRIGger:RS232:WIDTh {0}&#34;.format(bits))
+        else:
+            print(&#39;Unsupported value, accept 5,6,7 or 8&#39;)
+         
+    
+    def setup(self, src = &#34;chan1&#34;, voltage = 0.0, baud=9600, when=&#34;data&#34;,data=10, dataBits=8, stopBit=1, parity=&#34;none&#34;):
+        &#34;&#34;&#34;Set rs232 parameters in one function
+
+        Args:
+            src (str): source channel
+            voltage (str): source voltage
+            boud (str): boud rate
+            when (str): when to trigger
+            data (str): if when is data set ASCII dec value to trigger
+            dataBits (int): data bits
+            stopBit (int): stop bit
+            parity (str): parity for rs232
+        &#34;&#34;&#34;
+        self.setSourceChannel(src)
+        self.setVoltageLevel(voltage)
+        self.setBoud(baud)
+        self.setWhen(when)
+        if when == &#34;data&#34;:
+            self.setData(data)
+        self.setStopBit(stopBit)
+        self.setParity(parity)
+        self.setDataBits(dataBits)
+    
+    def restoreDefault(self):
+        &#34;&#34;&#34;Restore rs232 trigger options to default
+            
+        Returns:
+            dict: with default key,pair values
+        &#34;&#34;&#34;
+        self.setup()
+        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), &#34;when&#34;:self.getWhen(),
+        &#39;data&#39;:self.getData(), &#34;stopBit&#34;:self.getStopBit()
+         }
+
+    def getDefaults(self):
+        &#34;&#34;&#34;Returns:
+            dict: with availble default key,pair values
+        &#34;&#34;&#34;
+        return {&#39;src&#39;:&#39;chan1&#39;, &#39;voltage&#39;:0, &#39;baud&#39;:9600, &#39;when&#39;:&#34;data&#34;,&#34;data&#34;:10, &#34;dataBits&#34;:8, &#34;stopBit&#34;:1, &#34;parity&#34;:&#39;none&#39;}
+    
+    def getCurrentSetup(self):
+        &#34;&#34;&#34;Returns:
+            dict: current configuration
+        &#34;&#34;&#34;
+        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), 
+        &#39;when&#39;:self.getWhen(), &#39;data&#39;:self.getData(), &#34;dataBits&#34;:self.getDataBits(), &#34;stopBit&#34;:self.getStopBit(), &#34;parity&#34;:self.getParity()}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.TriggerFactory" href="#mso.triggers.TriggerFactory">TriggerFactory</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="mso.triggers.RS232.getBoud"><code class="name flex">
+<span>def <span class="ident">getBoud</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: boud rate</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getBoud(self):
+    &#34;&#34;&#34;Returns:
+        str: boud rate
+    &#34;&#34;&#34;
+    return  self.instr.ask(&#34;:TRIGger:RS232:BAUD?&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getCurrentSetup"><code class="name flex">
+<span>def <span class="ident">getCurrentSetup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+dict: current configuration</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getCurrentSetup(self):
+    &#34;&#34;&#34;Returns:
+        dict: current configuration
+    &#34;&#34;&#34;
+    return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), 
+    &#39;when&#39;:self.getWhen(), &#39;data&#39;:self.getData(), &#34;dataBits&#34;:self.getDataBits(), &#34;stopBit&#34;:self.getStopBit(), &#34;parity&#34;:self.getParity()}</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getData"><code class="name flex">
+<span>def <span class="ident">getData</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: if when is set to 'DATA' return trigger data in decimal 0-255</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getData(self):
+    &#34;&#34;&#34;Returns:
+        str: if when is set to &#39;DATA&#39; return trigger data in decimal 0-255
+    &#34;&#34;&#34;
+    return  self.instr.ask(&#34;:TRIGger:RS232:DATA?&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getDataBits"><code class="name flex">
+<span>def <span class="ident">getDataBits</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: data bits for rs232 with values 5|7|6|8</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getDataBits(self):
+    &#34;&#34;&#34;Returns:
+        str: data bits for rs232 with values 5|7|6|8
+    &#34;&#34;&#34;
+    return  self.instr.ask(&#34;:TRIGger:RS232:WIDTh?&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getDefaults"><code class="name flex">
+<span>def <span class="ident">getDefaults</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+dict: with availble default key,pair values</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getDefaults(self):
+    &#34;&#34;&#34;Returns:
+        dict: with availble default key,pair values
+    &#34;&#34;&#34;
+    return {&#39;src&#39;:&#39;chan1&#39;, &#39;voltage&#39;:0, &#39;baud&#39;:9600, &#39;when&#39;:&#34;data&#34;,&#34;data&#34;:10, &#34;dataBits&#34;:8, &#34;stopBit&#34;:1, &#34;parity&#34;:&#39;none&#39;}</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getParity"><code class="name flex">
+<span>def <span class="ident">getParity</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: parity for rs232 with values None|Odd|Even</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getParity(self):
+    &#34;&#34;&#34;Returns:
+        str: parity for rs232 with values None|Odd|Even
+    &#34;&#34;&#34;
+    return  self.instr.ask(&#34;:TRIGger:RS232:PARity?&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getSourceChannel"><code class="name flex">
+<span>def <span class="ident">getSourceChannel</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: source trigger channel</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getSourceChannel(self):
+    &#34;&#34;&#34;Returns:
+        str: source trigger channel
+    &#34;&#34;&#34;
+    return  self.instr.ask(&#34;:TRIGger:RS232:SOURce?&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getStopBit"><code class="name flex">
+<span>def <span class="ident">getStopBit</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: stop bit for rs232 with values 1|1,5|2</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getStopBit(self):
+    &#34;&#34;&#34;Returns:
+        str: stop bit for rs232 with values 1|1,5|2
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:TRIGger:RS232:STOP?&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getVoltageLevel"><code class="name flex">
+<span>def <span class="ident">getVoltageLevel</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: voltage level</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getVoltageLevel(self):
+    &#34;&#34;&#34;Returns:
+        str: voltage level
+    &#34;&#34;&#34;
+    return  self.instr.ask(&#34;:TRIGger:RS232:LEVel?&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.getWhen"><code class="name flex">
+<span>def <span class="ident">getWhen</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: when trigger will happen</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getWhen(self):
+    &#34;&#34;&#34;Returns:
+        str: when trigger will happen
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:TRIGger:RS232:WHEN?&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.restoreDefault"><code class="name flex">
+<span>def <span class="ident">restoreDefault</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Restore rs232 trigger options to default</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>with default key,pair values</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def restoreDefault(self):
+    &#34;&#34;&#34;Restore rs232 trigger options to default
+        
+    Returns:
+        dict: with default key,pair values
+    &#34;&#34;&#34;
+    self.setup()
+    return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), &#34;when&#34;:self.getWhen(),
+    &#39;data&#39;:self.getData(), &#34;stopBit&#34;:self.getStopBit()
+     }</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setBoud"><code class="name flex">
+<span>def <span class="ident">setBoud</span></span>(<span>self, boud=9600)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set boud lever for trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>boud</code></strong> :&ensp;<code>str</code></dt>
+<dd>baud rate for rs232</dd>
+</dl>
+<p>If the baud rate is set to a value with "M",
+then "A" should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setBoud(self, boud=9600):
+    &#34;&#34;&#34;Set boud lever for trigger
+
+    Args:
+        boud (str): baud rate for rs232
+        If the baud rate is set to a value with &#34;M&#34;, 
+        then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
+    &#34;&#34;&#34;
+    try:
+        self.instr.write(&#34;:TRIGger:RS232:BAUD {0}&#34;.format(boud))
+    except ValueError as err:
+        print(&#39;Unsupported boud:&#39;, err)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setData"><code class="name flex">
+<span>def <span class="ident">setData</span></span>(<span>self, num=10)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set on which ASCII char trigger when "data" is set as when</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>num</code></strong> :&ensp;<code>int</code></dt>
+<dd>decimal 0-255</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setData(self, num=10):
+    &#34;&#34;&#34;Set on which ASCII char trigger when &#34;data&#34; is set as when
+
+    Args:
+        num (int): decimal 0-255
+    &#34;&#34;&#34;
+    result = num in rs232[&#39;data&#39;]
+    if result:
+        self.instr.write(&#34;:TRIGger:RS232:DATA {0}&#34;.format(num))
+    else:
+        print(&#39;Unsupported data, accept value in range 0-255&#39;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setDataBits"><code class="name flex">
+<span>def <span class="ident">setDataBits</span></span>(<span>self, bits=8)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set stop bit for rs232</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>bits</code></strong> :&ensp;<code>int</code></dt>
+<dd>accepts 5|6|7|8</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setDataBits(self, bits=8):
+    &#34;&#34;&#34;Set stop bit for rs232
+
+    Args:
+        bits (int): accepts 5|6|7|8
+    &#34;&#34;&#34;
+    result = bits in rs232[&#39;dataBits&#39;]
+    if result:
+        self.instr.write(&#34;:TRIGger:RS232:WIDTh {0}&#34;.format(bits))
+    else:
+        print(&#39;Unsupported value, accept 5,6,7 or 8&#39;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setParity"><code class="name flex">
+<span>def <span class="ident">setParity</span></span>(<span>self, parity='none')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set stop bit for rs232</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>parity</code></strong> :&ensp;<code>str</code></dt>
+<dd>accepts none|even|odd</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setParity(self, parity=&#34;none&#34;):
+    &#34;&#34;&#34;Set stop bit for rs232
+
+    Args:
+        parity (str): accepts none|even|odd
+    &#34;&#34;&#34;
+    try:
+        self.instr.write(&#34;:TRIGger:RS232:PARity {0}&#34;.format(rs232[&#39;parity&#39;][parity.lower()]))
+    except KeyError as err:
+        print(&#39;Unsupported parity, accept ODD, EVEN, NONE:&#39;, err)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setSourceChannel"><code class="name flex">
+<span>def <span class="ident">setSourceChannel</span></span>(<span>self, chan='chan1')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set channel source for trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>chan</code></strong> :&ensp;<code>str</code></dt>
+<dd>source channel for trigger</dd>
+</dl>
+<p>provide as chan1, chan2&hellip; it will be convered to CHANnel1, CHANnel2 etc </p>
+<p>available channels:
+D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel3|CHANnel4</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setSourceChannel(self, chan=&#34;chan1&#34;):
+    &#34;&#34;&#34;Set channel source for trigger
+
+    Args:
+        chan (str): source channel for trigger
+        provide as chan1, chan2... it will be convered to CHANnel1, CHANnel2 etc 
+        
+        available channels:
+        D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D1 0|D11|D12|D13|D14|D15|CHANnel1|CHANnel2|CHANnel3|CHANnel4
+    &#34;&#34;&#34;
+    try:
+        self.instr.write(&#34;:TRIGger:RS232:SOURce {0}&#34;.format(rs232[&#39;source&#39;][chan.lower()]))
+    except KeyError as err:
+        print(&#39;Unsupported channel source:&#39;, err)
+        sys.exit()</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setStopBit"><code class="name flex">
+<span>def <span class="ident">setStopBit</span></span>(<span>self, stopBit=1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set stop bit for rs232</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>stopBit</code></strong> :&ensp;<code>int</code></dt>
+<dd>accepts 1|1.5|2</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setStopBit(self, stopBit=1):
+    &#34;&#34;&#34;Set stop bit for rs232
+
+    Args:
+        stopBit (int): accepts 1|1.5|2
+    &#34;&#34;&#34;
+    result = stopBit in rs232[&#39;stopBits&#39;]
+    if result:
+        self.instr.write(&#34;:TRIGger:RS232:STOP {0}&#34;.format(stopBit))
+    else:
+        print(&#39;Unsupported value, accept 1,1.5,2&#39;)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setVoltageLevel"><code class="name flex">
+<span>def <span class="ident">setVoltageLevel</span></span>(<span>self, voltage=0.0)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set voltage lever for trigger</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>voltage</code></strong> :&ensp;<code>str</code></dt>
+<dd>support extension with mV|uV|nV|kV|V</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setVoltageLevel(self, voltage=0.0):
+    &#34;&#34;&#34;Set voltage lever for trigger
+
+    Args:
+        voltage (str): support extension with mV|uV|nV|kV|V
+    &#34;&#34;&#34;
+    try:
+        self.instr.write(&#34;:TRIGger:RS232:LEVel {0}&#34;.format(voltage))
+    except ValueError as err:
+        print(&#39;Unsupported voltage:&#39;, err)
+        sys.exit()</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setWhen"><code class="name flex">
+<span>def <span class="ident">setWhen</span></span>(<span>self, value='data')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set when trigger fire</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>when</code></strong> :&ensp;<code>str</code></dt>
+<dd>start|error|cerror|data</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setWhen(self, value=&#34;data&#34;):
+    &#34;&#34;&#34;Set when trigger fire
+
+    Args:
+        when (str): start|error|cerror|data
+    &#34;&#34;&#34;
+    try:
+        self.instr.write(&#34;:TRIGger:RS232:WHEN {0}&#34;.format(rs232[&#39;when&#39;][value.lower()]))
+    except KeyError as err:
+        print(&#39;Unsupported when source:&#39;, err)</code></pre>
+</details>
+</dd>
+<dt id="mso.triggers.RS232.setup"><code class="name flex">
+<span>def <span class="ident">setup</span></span>(<span>self, src='chan1', voltage=0.0, baud=9600, when='data', data=10, dataBits=8, stopBit=1, parity='none')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set rs232 parameters in one function</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>src</code></strong> :&ensp;<code>str</code></dt>
+<dd>source channel</dd>
+<dt><strong><code>voltage</code></strong> :&ensp;<code>str</code></dt>
+<dd>source voltage</dd>
+<dt><strong><code>boud</code></strong> :&ensp;<code>str</code></dt>
+<dd>boud rate</dd>
+<dt><strong><code>when</code></strong> :&ensp;<code>str</code></dt>
+<dd>when to trigger</dd>
+<dt><strong><code>data</code></strong> :&ensp;<code>str</code></dt>
+<dd>if when is data set ASCII dec value to trigger</dd>
+<dt><strong><code>dataBits</code></strong> :&ensp;<code>int</code></dt>
+<dd>data bits</dd>
+<dt><strong><code>stopBit</code></strong> :&ensp;<code>int</code></dt>
+<dd>stop bit</dd>
+<dt><strong><code>parity</code></strong> :&ensp;<code>str</code></dt>
+<dd>parity for rs232</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setup(self, src = &#34;chan1&#34;, voltage = 0.0, baud=9600, when=&#34;data&#34;,data=10, dataBits=8, stopBit=1, parity=&#34;none&#34;):
+    &#34;&#34;&#34;Set rs232 parameters in one function
+
+    Args:
+        src (str): source channel
+        voltage (str): source voltage
+        boud (str): boud rate
+        when (str): when to trigger
+        data (str): if when is data set ASCII dec value to trigger
+        dataBits (int): data bits
+        stopBit (int): stop bit
+        parity (str): parity for rs232
+    &#34;&#34;&#34;
+    self.setSourceChannel(src)
+    self.setVoltageLevel(voltage)
+    self.setBoud(baud)
+    self.setWhen(when)
+    if when == &#34;data&#34;:
+        self.setData(data)
+    self.setStopBit(stopBit)
+    self.setParity(parity)
+    self.setDataBits(dataBits)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mso.triggers.TriggerFactory" href="#mso.triggers.TriggerFactory">TriggerFactory</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mso.triggers.TriggerFactory.factory" href="#mso.triggers.TriggerFactory.factory">factory</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mso.triggers.TriggerFactory"><code class="flex name class">
+<span>class <span class="ident">TriggerFactory</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Produces trigger objects</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TriggerFactory(object):
+    &#34;&#34;&#34;Produces trigger objects&#34;&#34;&#34;
+
+    def factory(type, instr):
+        &#34;&#34;&#34;Produce object base on trigger type
+
+        Args:
+            type (str): Type of trigger
+            instr (obj): vx11 instance
+
+        Returns:
+            object: Trigger object base on type
+        &#34;&#34;&#34;
+        if type == &#34;RS232&#34;:
+            return RS232(instr)
+
+    factory = staticmethod(factory)</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mso.triggers.RS232" href="#mso.triggers.RS232">RS232</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="mso.triggers.TriggerFactory.factory"><code class="name flex">
+<span>def <span class="ident">factory</span></span>(<span>type, instr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Produce object base on trigger type</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong> :&ensp;<code>str</code></dt>
+<dd>Type of trigger</dd>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>Trigger object base on type</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def factory(type, instr):
+    &#34;&#34;&#34;Produce object base on trigger type
+
+    Args:
+        type (str): Type of trigger
+        instr (obj): vx11 instance
+
+    Returns:
+        object: Trigger object base on type
+    &#34;&#34;&#34;
+    if type == &#34;RS232&#34;:
+        return RS232(instr)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mso" href="index.html">mso</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="mso.triggers.RS232" href="#mso.triggers.RS232">RS232</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mso.triggers.RS232.getBoud" href="#mso.triggers.RS232.getBoud">getBoud</a></code></li>
+<li><code><a title="mso.triggers.RS232.getCurrentSetup" href="#mso.triggers.RS232.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.triggers.RS232.getData" href="#mso.triggers.RS232.getData">getData</a></code></li>
+<li><code><a title="mso.triggers.RS232.getDataBits" href="#mso.triggers.RS232.getDataBits">getDataBits</a></code></li>
+<li><code><a title="mso.triggers.RS232.getDefaults" href="#mso.triggers.RS232.getDefaults">getDefaults</a></code></li>
+<li><code><a title="mso.triggers.RS232.getParity" href="#mso.triggers.RS232.getParity">getParity</a></code></li>
+<li><code><a title="mso.triggers.RS232.getSourceChannel" href="#mso.triggers.RS232.getSourceChannel">getSourceChannel</a></code></li>
+<li><code><a title="mso.triggers.RS232.getStopBit" href="#mso.triggers.RS232.getStopBit">getStopBit</a></code></li>
+<li><code><a title="mso.triggers.RS232.getVoltageLevel" href="#mso.triggers.RS232.getVoltageLevel">getVoltageLevel</a></code></li>
+<li><code><a title="mso.triggers.RS232.getWhen" href="#mso.triggers.RS232.getWhen">getWhen</a></code></li>
+<li><code><a title="mso.triggers.RS232.restoreDefault" href="#mso.triggers.RS232.restoreDefault">restoreDefault</a></code></li>
+<li><code><a title="mso.triggers.RS232.setBoud" href="#mso.triggers.RS232.setBoud">setBoud</a></code></li>
+<li><code><a title="mso.triggers.RS232.setData" href="#mso.triggers.RS232.setData">setData</a></code></li>
+<li><code><a title="mso.triggers.RS232.setDataBits" href="#mso.triggers.RS232.setDataBits">setDataBits</a></code></li>
+<li><code><a title="mso.triggers.RS232.setParity" href="#mso.triggers.RS232.setParity">setParity</a></code></li>
+<li><code><a title="mso.triggers.RS232.setSourceChannel" href="#mso.triggers.RS232.setSourceChannel">setSourceChannel</a></code></li>
+<li><code><a title="mso.triggers.RS232.setStopBit" href="#mso.triggers.RS232.setStopBit">setStopBit</a></code></li>
+<li><code><a title="mso.triggers.RS232.setVoltageLevel" href="#mso.triggers.RS232.setVoltageLevel">setVoltageLevel</a></code></li>
+<li><code><a title="mso.triggers.RS232.setWhen" href="#mso.triggers.RS232.setWhen">setWhen</a></code></li>
+<li><code><a title="mso.triggers.RS232.setup" href="#mso.triggers.RS232.setup">setup</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mso.triggers.TriggerFactory" href="#mso.triggers.TriggerFactory">TriggerFactory</a></code></h4>
+<ul class="">
+<li><code><a title="mso.triggers.TriggerFactory.factory" href="#mso.triggers.TriggerFactory.factory">factory</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
