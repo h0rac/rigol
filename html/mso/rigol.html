@@ -136,11 +136,11 @@ class RigolMSO():
             busNum (int): line 1|2|3|4
             busType (str): parallel|rs232|spi|iic|iis|lin|can|flexray|m1553
         Returns:
-            obj: bus subclass object
+            obj: Bus subclass object
         &#34;&#34;&#34;
         self.mainBus = Bus(self.instr)
         try:
-            self.mainBus.setBus(int(busNum), busType)
+            self.mainBus._setBus(int(busNum), busType)
             self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
         except ValueError as err:
              print(&#39;Unsupported busNum:&#39;, err)
@@ -275,11 +275,11 @@ class RigolMSO():
             busNum (int): line 1|2|3|4
             busType (str): parallel|rs232|spi|iic|iis|lin|can|flexray|m1553
         Returns:
-            obj: bus subclass object
+            obj: Bus subclass object
         &#34;&#34;&#34;
         self.mainBus = Bus(self.instr)
         try:
-            self.mainBus.setBus(int(busNum), busType)
+            self.mainBus._setBus(int(busNum), busType)
             self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
         except ValueError as err:
              print(&#39;Unsupported busNum:&#39;, err)
@@ -379,7 +379,7 @@ str: selected trigger type</p></section>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><strong><code>obj</code></strong></dt>
-<dd>bus subclass object</dd>
+<dd>Bus subclass object</dd>
 </dl></section>
 <details class="source">
 <summary>Source code</summary>
@@ -389,11 +389,11 @@ str: selected trigger type</p></section>
         busNum (int): line 1|2|3|4
         busType (str): parallel|rs232|spi|iic|iis|lin|can|flexray|m1553
     Returns:
-        obj: bus subclass object
+        obj: Bus subclass object
     &#34;&#34;&#34;
     self.mainBus = Bus(self.instr)
     try:
-        self.mainBus.setBus(int(busNum), busType)
+        self.mainBus._setBus(int(busNum), busType)
         self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
     except ValueError as err:
          print(&#39;Unsupported busNum:&#39;, err)

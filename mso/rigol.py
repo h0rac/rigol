@@ -112,11 +112,11 @@ class RigolMSO():
             busNum (int): line 1|2|3|4
             busType (str): parallel|rs232|spi|iic|iis|lin|can|flexray|m1553
         Returns:
-            obj: bus subclass object
+            obj: Bus subclass object
         """
         self.mainBus = Bus(self.instr)
         try:
-            self.mainBus.setBus(int(busNum), busType)
+            self.mainBus._setBus(int(busNum), busType)
             self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
         except ValueError as err:
              print('Unsupported busNum:', err)

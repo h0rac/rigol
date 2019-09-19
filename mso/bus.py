@@ -119,7 +119,7 @@ class Bus():
             sys.exit(0)
         return self.instr.ask(":BUS{0}:THReshold? {1}".format(self.busNum, ttype))
     
-    def setBus(self, busNum=1, busType="rs232"):
+    def _setBus(self, busNum=1, busType="rs232"):
         """Get bus number and type and set decoder bus
         Args:
             busNum (int): bus number 1|2|3|4
@@ -132,7 +132,7 @@ class Bus():
             print("Device support only 4 buses")
             sys.exit()
     
-    def toggle(self, toggle=False):
+    def _toggle(self, toggle=False):
         """Enable bus decoder base on status
         Args:
             toggle (bool): True|False
@@ -146,7 +146,7 @@ class Bus():
         else:
             print("Expect 'True' or 'False' to toggle bus'")
     
-    def toggleLabel(self, toggle=False):
+    def _toggleLabel(self, toggle=False):
         """Enable bus decoder label base on toggle 
         Args:
             toggle (bool): True|False
@@ -160,7 +160,7 @@ class Bus():
         else:
             print("Expect 'True' or 'False to toggle bus label'")
     
-    def setDataformat(self, format):
+    def _setDataformat(self, format):
         """Enable bus decoder data format
         Args:
             format (str): ascii|hex|dec|bin
@@ -170,7 +170,7 @@ class Bus():
         except KeyError as err:
             print("Unsupported data format: ", err)
     
-    def setPosition(self, pos):
+    def _setPosition(self, pos):
         """Set bus decoder position
         Args:
             pos (int): pos >= -167 and pos <=217
@@ -183,7 +183,7 @@ class Bus():
         else:
             print("Device support only 4 buses")
     
-    def setThreshold(self, threshold, ttype):
+    def _setThreshold(self, threshold, ttype):
         """Set bus decoder threshold value to proper line type
         Args:
             threshold (str): value that represents voltage level, accept extension kV|uV|mV|V
@@ -198,18 +198,18 @@ class Bus():
     def setup(self, toggle=False, toggleLabel=False, format="ascii", position=0, threshold=0.0, ttype="tx"):
         """Set bus decoder in single function
         Args:
-            toggle (bool): enable bus decoder
-            toggleLabel (bool): enable bus decoder label display
-            format (str): defines format data to display
-            position (str): defines position of decoder line on screen
-            threshold (str): voltage level 
-            ttype (str): type of line
+            toggle (bool): enable bus decoder -> True|False
+            toggleLabel (bool): enable bus decoder label display -> True|False
+            format (str): defines format data to display -> ascii|hex|dec|bin
+            position (str): defines position of decoder line on screen -> pos >= -167 and pos <=217
+            threshold (str): value that represents voltage level, accept extension kV|uV|mV|V
+            ttype (str): type of line -> pal|tx|rx|scl|sda|cs|clk|miso|mosi|lin|can|cansub1
         """
-        self.toggle(toggle)
-        self.toggleLabel(toggleLabel)
-        self.setDataformat(format)
-        self.setPosition(position)
-        self.setThreshold(threshold, ttype)
+        self._toggle(toggle)
+        self._toggleLabel(toggleLabel)
+        self._setDataformat(format)
+        self._setPosition(position)
+        self._setThreshold(threshold, ttype)
     
     def getCurrentSetup(self):
         """Returns:
@@ -247,7 +247,7 @@ class Bus():
                 print("Unsupported toggle value, expect True or False")
 
 
-class RS232Bus(Bus):
+class RS232(Bus):
     """Class represents rs232 decoder
 
         Args:
