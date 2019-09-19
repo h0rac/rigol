@@ -31,88 +31,113 @@ from mso.triggers import TriggerFactory
 from mso.system import System
 from mso.bus import Bus, BusFactory
 
-sweap = None
+main = None
 
-with open(&#39;{}/rigol/json/trigger/trigger.json&#39;.format(os.path.dirname(os.getcwd())), &#39;r&#39;) as f:
-    sweap = json.load(f)
+with open(&#39;{}/rigol/json/main/main.json&#39;.format(os.path.dirname(os.getcwd())), &#39;r&#39;) as f:
+    main = json.load(f)
 
-class RigolMSO():        
-    def __init__(self, addr):
+class RigolMSO():
+    &#34;&#34;&#34;Class represents main rigol device
+
+        Args:
+            addr (str): IP address of rigol device
+        Returns:
+            object: rigol object
+    &#34;&#34;&#34;       
+    def __init__(self, addr=&#34;192.168.1.10&#34;):
         self.instr = vxi11.Instrument(addr)
         print(self.instr.ask(&#34;*IDN?&#34;))
-        self.triggers = {&#34;edge&#34;:&#34;EDGE&#34;,
-        &#34;pulse&#34;: &#34;PULSe&#34;,
-        &#34;slope&#34;:&#34;SLOPe&#34;,
-        &#34;video&#34;: &#34;VIDeo&#34;,
-        &#34;pattern&#34;: &#34;PATTern&#34;,
-        &#34;duration&#34;: &#34;DURation&#34;, 
-        &#34;timeout&#34;: &#34;TIMeout&#34;,
-        &#34;runt&#34;: &#34;RUNT&#34;,
-        &#34;window&#34;: &#34;WINDow&#34;,
-        &#34;delay&#34;:&#34;DELay&#34;,
-        &#34;setup&#34;:&#34;SETup&#34;,
-        &#34;nedge&#34;:&#34;NEDGe&#34;, 
-        &#34;rs232&#34;:&#34;RS232&#34;,
-        &#34;iic&#34;: &#34;IIC&#34;,
-        &#34;spi&#34;:&#34;SPI&#34;,
-        &#34;can&#34;:&#34;CAN&#34;,
-        &#34;flexray&#34;:&#34;FLEXray&#34;,
-        &#34;lin&#34;:&#34;LIN&#34;,
-        &#34;iis&#34;:&#34;IIS&#34;,
-        &#34;m1553&#34;:&#34;M1553&#34;}
         self.triggerType = None
         self.system = None
         self.mainBus = None
         self.bus = None
 
-    def _getTriggerType(self):
+    def getTriggerType(self):
+        &#34;&#34;&#34;Returns:
+            str: selected trigger type
+        &#34;&#34;&#34;
         return  self.instr.ask(&#34;:TRIGger:MODE?&#34;)
 
-    def triggerOn(self, trigger = None):
+    def _triggerOn(self, trigger=&#34;rs232&#34;):
+        &#34;&#34;&#34;Set trigger type
+        Args:
+            trigger (str): pulse|slope|video|pattern|duration|timeout|runt|window|delay|setup
+            |nedge|rs232|iic|spi|can|flexray|lin|iis|m1553
+        Returns:
+            str: trigger type after set
+        &#34;&#34;&#34;
         if trigger:
             try:
-                self.instr.write(&#34;:TRIGger:MODE {0}&#34;.format(self.triggers[trigger.lower()]))
+                self.instr.write(&#34;:TRIGger:MODE {0}&#34;.format(main[&#39;triggers&#39;][trigger.lower()]))
             except KeyError as err:
                 print(&#39;Unsupported trigger:&#39;, err)
                 sys.exit()
         else:
             self.instr.write(&#34;:TRIGger:MODE {0}&#34;.format(self.triggerType))
-        return self._getTriggerType()
+        return self.getTriggerType()
 
-    def getTrigger(self):
-        return self._getTriggerType()
     
     def getAllTriggers(self):
-        return [k for k in self.triggers.keys()]
+        &#34;&#34;&#34;Returns:
+            dict: all possible triggers
+        &#34;&#34;&#34;
+        return main[&#39;triggers&#39;]
     
-    def setTrigger(self, trigger):
+    def setTriggerType(self, trigger):
+        &#34;&#34;&#34;Set trigger type
+        Args:
+            trigger (str): pulse|slope|video|pattern|duration|timeout|runt|window|delay|setup
+            |nedge|rs232|iic|spi|can|flexray|lin|iis|m1553
+        Returns:
+            str: trigger type after set
+        &#34;&#34;&#34;
         try:
-            self.triggerType = self.triggers[trigger.lower()]
-            self.triggerOn(trigger)
+            self.triggerType = main[&#39;triggers&#39;][trigger.lower()]
+            self._triggerOn(trigger)
             self.trigger = TriggerFactory.factory(trigger.upper(), self.instr )
             return self.trigger
         except KeyError as err:
             print(&#39;Unsupported trigger:&#39;, err)
             sys.exit()
     
-    def sweepTrigger(self, state):
+    def sweepTrigger(self, mode=&#34;auto&#34;):
+        &#34;&#34;&#34;Set trigger mode
+        Args:
+            mode (str): auto|single|normal
+        &#34;&#34;&#34;
         try:
-            self.instr.write(&#34;:TRIGger:SWEep {0}&#34;.format(sweap[&#39;trigger&#39;][state.lower()]))
+            self.instr.write(&#34;:TRIGger:SWEep {0}&#34;.format(main[&#39;trigger&#39;][mode.lower()]))
         except KeyError as err:
-            print(&#39;Unsupported trigger sweap:&#39;, err)
+            print(&#39;Unsupported trigger sweep:&#39;, err)
             sys.exit()
 
     def getSweep(self):
+        &#34;&#34;&#34;Returns:
+            str: trigger mode auto|single|normal
+        &#34;&#34;&#34;
         return self.instr.ask(&#34;:TRIGger:SWEep?&#34;)
     
-    def enableSystem(self):
+    def getSystem(self):
+        &#34;&#34;&#34;Returns:
+            obj: return system object
+        &#34;&#34;&#34;
         self.system = System(self.instr)
         return self.system
     
     def getLastBus(self):
+        &#34;&#34;&#34;Returns:
+            str: decoder bus object
+        &#34;&#34;&#34;
         return self.mainBus
     
     def setBus(self, busNum, busType):
+        &#34;&#34;&#34;Set bus decoder line
+        Args:
+            busNum (int): line 1|2|3|4
+            busType (str): parallel|rs232|spi|iic|iis|lin|can|flexray|m1553
+        Returns:
+            obj: bus type object
+        &#34;&#34;&#34;
         self.mainBus = Bus(self.instr)
         try:
             self.mainBus.setBus(int(busNum), busType)
@@ -134,89 +159,124 @@ class RigolMSO():
 <dl>
 <dt id="mso.rigol.RigolMSO"><code class="flex name class">
 <span>class <span class="ident">RigolMSO</span></span>
-<span>(</span><span>addr)</span>
+<span>(</span><span>addr='192.168.1.10')</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Class represents main rigol device</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>addr</code></strong> :&ensp;<code>str</code></dt>
+<dd>IP address of rigol device</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rigol object</dd>
+</dl></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class RigolMSO():        
-    def __init__(self, addr):
+<pre><code class="python">class RigolMSO():
+    &#34;&#34;&#34;Class represents main rigol device
+
+        Args:
+            addr (str): IP address of rigol device
+        Returns:
+            object: rigol object
+    &#34;&#34;&#34;       
+    def __init__(self, addr=&#34;192.168.1.10&#34;):
         self.instr = vxi11.Instrument(addr)
         print(self.instr.ask(&#34;*IDN?&#34;))
-        self.triggers = {&#34;edge&#34;:&#34;EDGE&#34;,
-        &#34;pulse&#34;: &#34;PULSe&#34;,
-        &#34;slope&#34;:&#34;SLOPe&#34;,
-        &#34;video&#34;: &#34;VIDeo&#34;,
-        &#34;pattern&#34;: &#34;PATTern&#34;,
-        &#34;duration&#34;: &#34;DURation&#34;, 
-        &#34;timeout&#34;: &#34;TIMeout&#34;,
-        &#34;runt&#34;: &#34;RUNT&#34;,
-        &#34;window&#34;: &#34;WINDow&#34;,
-        &#34;delay&#34;:&#34;DELay&#34;,
-        &#34;setup&#34;:&#34;SETup&#34;,
-        &#34;nedge&#34;:&#34;NEDGe&#34;, 
-        &#34;rs232&#34;:&#34;RS232&#34;,
-        &#34;iic&#34;: &#34;IIC&#34;,
-        &#34;spi&#34;:&#34;SPI&#34;,
-        &#34;can&#34;:&#34;CAN&#34;,
-        &#34;flexray&#34;:&#34;FLEXray&#34;,
-        &#34;lin&#34;:&#34;LIN&#34;,
-        &#34;iis&#34;:&#34;IIS&#34;,
-        &#34;m1553&#34;:&#34;M1553&#34;}
         self.triggerType = None
         self.system = None
         self.mainBus = None
         self.bus = None
 
-    def _getTriggerType(self):
+    def getTriggerType(self):
+        &#34;&#34;&#34;Returns:
+            str: selected trigger type
+        &#34;&#34;&#34;
         return  self.instr.ask(&#34;:TRIGger:MODE?&#34;)
 
-    def triggerOn(self, trigger = None):
+    def _triggerOn(self, trigger=&#34;rs232&#34;):
+        &#34;&#34;&#34;Set trigger type
+        Args:
+            trigger (str): pulse|slope|video|pattern|duration|timeout|runt|window|delay|setup
+            |nedge|rs232|iic|spi|can|flexray|lin|iis|m1553
+        Returns:
+            str: trigger type after set
+        &#34;&#34;&#34;
         if trigger:
             try:
-                self.instr.write(&#34;:TRIGger:MODE {0}&#34;.format(self.triggers[trigger.lower()]))
+                self.instr.write(&#34;:TRIGger:MODE {0}&#34;.format(main[&#39;triggers&#39;][trigger.lower()]))
             except KeyError as err:
                 print(&#39;Unsupported trigger:&#39;, err)
                 sys.exit()
         else:
             self.instr.write(&#34;:TRIGger:MODE {0}&#34;.format(self.triggerType))
-        return self._getTriggerType()
+        return self.getTriggerType()
 
-    def getTrigger(self):
-        return self._getTriggerType()
     
     def getAllTriggers(self):
-        return [k for k in self.triggers.keys()]
+        &#34;&#34;&#34;Returns:
+            dict: all possible triggers
+        &#34;&#34;&#34;
+        return main[&#39;triggers&#39;]
     
-    def setTrigger(self, trigger):
+    def setTriggerType(self, trigger):
+        &#34;&#34;&#34;Set trigger type
+        Args:
+            trigger (str): pulse|slope|video|pattern|duration|timeout|runt|window|delay|setup
+            |nedge|rs232|iic|spi|can|flexray|lin|iis|m1553
+        Returns:
+            str: trigger type after set
+        &#34;&#34;&#34;
         try:
-            self.triggerType = self.triggers[trigger.lower()]
-            self.triggerOn(trigger)
+            self.triggerType = main[&#39;triggers&#39;][trigger.lower()]
+            self._triggerOn(trigger)
             self.trigger = TriggerFactory.factory(trigger.upper(), self.instr )
             return self.trigger
         except KeyError as err:
             print(&#39;Unsupported trigger:&#39;, err)
             sys.exit()
     
-    def sweepTrigger(self, state):
+    def sweepTrigger(self, mode=&#34;auto&#34;):
+        &#34;&#34;&#34;Set trigger mode
+        Args:
+            mode (str): auto|single|normal
+        &#34;&#34;&#34;
         try:
-            self.instr.write(&#34;:TRIGger:SWEep {0}&#34;.format(sweap[&#39;trigger&#39;][state.lower()]))
+            self.instr.write(&#34;:TRIGger:SWEep {0}&#34;.format(main[&#39;trigger&#39;][mode.lower()]))
         except KeyError as err:
-            print(&#39;Unsupported trigger sweap:&#39;, err)
+            print(&#39;Unsupported trigger sweep:&#39;, err)
             sys.exit()
 
     def getSweep(self):
+        &#34;&#34;&#34;Returns:
+            str: trigger mode auto|single|normal
+        &#34;&#34;&#34;
         return self.instr.ask(&#34;:TRIGger:SWEep?&#34;)
     
-    def enableSystem(self):
+    def getSystem(self):
+        &#34;&#34;&#34;Returns:
+            obj: return system object
+        &#34;&#34;&#34;
         self.system = System(self.instr)
         return self.system
     
     def getLastBus(self):
+        &#34;&#34;&#34;Returns:
+            str: decoder bus object
+        &#34;&#34;&#34;
         return self.mainBus
     
     def setBus(self, busNum, busType):
+        &#34;&#34;&#34;Set bus decoder line
+        Args:
+            busNum (int): line 1|2|3|4
+            busType (str): parallel|rs232|spi|iic|iis|lin|can|flexray|m1553
+        Returns:
+            obj: bus type object
+        &#34;&#34;&#34;
         self.mainBus = Bus(self.instr)
         try:
             self.mainBus.setBus(int(busNum), busType)
@@ -228,37 +288,33 @@ class RigolMSO():
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="mso.rigol.RigolMSO.enableSystem"><code class="name flex">
-<span>def <span class="ident">enableSystem</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def enableSystem(self):
-    self.system = System(self.instr)
-    return self.system</code></pre>
-</details>
-</dd>
 <dt id="mso.rigol.RigolMSO.getAllTriggers"><code class="name flex">
 <span>def <span class="ident">getAllTriggers</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns:
+dict: all possible triggers</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def getAllTriggers(self):
-    return [k for k in self.triggers.keys()]</code></pre>
+    &#34;&#34;&#34;Returns:
+        dict: all possible triggers
+    &#34;&#34;&#34;
+    return main[&#39;triggers&#39;]</code></pre>
 </details>
 </dd>
 <dt id="mso.rigol.RigolMSO.getLastBus"><code class="name flex">
 <span>def <span class="ident">getLastBus</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns:
+str: decoder bus object</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def getLastBus(self):
+    &#34;&#34;&#34;Returns:
+        str: decoder bus object
+    &#34;&#34;&#34;
     return self.mainBus</code></pre>
 </details>
 </dd>
@@ -266,32 +322,75 @@ class RigolMSO():
 <span>def <span class="ident">getSweep</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns:
+str: trigger mode auto|single|normal</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def getSweep(self):
+    &#34;&#34;&#34;Returns:
+        str: trigger mode auto|single|normal
+    &#34;&#34;&#34;
     return self.instr.ask(&#34;:TRIGger:SWEep?&#34;)</code></pre>
 </details>
 </dd>
-<dt id="mso.rigol.RigolMSO.getTrigger"><code class="name flex">
-<span>def <span class="ident">getTrigger</span></span>(<span>self)</span>
+<dt id="mso.rigol.RigolMSO.getSystem"><code class="name flex">
+<span>def <span class="ident">getSystem</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns:
+obj: return system object</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def getTrigger(self):
-    return self._getTriggerType()</code></pre>
+<pre><code class="python">def getSystem(self):
+    &#34;&#34;&#34;Returns:
+        obj: return system object
+    &#34;&#34;&#34;
+    self.system = System(self.instr)
+    return self.system</code></pre>
+</details>
+</dd>
+<dt id="mso.rigol.RigolMSO.getTriggerType"><code class="name flex">
+<span>def <span class="ident">getTriggerType</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns:
+str: selected trigger type</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getTriggerType(self):
+    &#34;&#34;&#34;Returns:
+        str: selected trigger type
+    &#34;&#34;&#34;
+    return  self.instr.ask(&#34;:TRIGger:MODE?&#34;)</code></pre>
 </details>
 </dd>
 <dt id="mso.rigol.RigolMSO.setBus"><code class="name flex">
 <span>def <span class="ident">setBus</span></span>(<span>self, busNum, busType)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Set bus decoder line</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>busNum</code></strong> :&ensp;<code>int</code></dt>
+<dd>line 1|2|3|4</dd>
+<dt><strong><code>busType</code></strong> :&ensp;<code>str</code></dt>
+<dd>parallel|rs232|spi|iic|iis|lin|can|flexray|m1553</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>obj</code></strong></dt>
+<dd>bus type object</dd>
+</dl></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def setBus(self, busNum, busType):
+    &#34;&#34;&#34;Set bus decoder line
+    Args:
+        busNum (int): line 1|2|3|4
+        busType (str): parallel|rs232|spi|iic|iis|lin|can|flexray|m1553
+    Returns:
+        obj: bus type object
+    &#34;&#34;&#34;
     self.mainBus = Bus(self.instr)
     try:
         self.mainBus.setBus(int(busNum), busType)
@@ -302,17 +401,35 @@ class RigolMSO():
     return self.bus</code></pre>
 </details>
 </dd>
-<dt id="mso.rigol.RigolMSO.setTrigger"><code class="name flex">
-<span>def <span class="ident">setTrigger</span></span>(<span>self, trigger)</span>
+<dt id="mso.rigol.RigolMSO.setTriggerType"><code class="name flex">
+<span>def <span class="ident">setTriggerType</span></span>(<span>self, trigger)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Set trigger type</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>trigger</code></strong> :&ensp;<code>str</code></dt>
+<dd>pulse|slope|video|pattern|duration|timeout|runt|window|delay|setup</dd>
+</dl>
+<p>|nedge|rs232|iic|spi|can|flexray|lin|iis|m1553</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>str</code></strong></dt>
+<dd>trigger type after set</dd>
+</dl></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def setTrigger(self, trigger):
+<pre><code class="python">def setTriggerType(self, trigger):
+    &#34;&#34;&#34;Set trigger type
+    Args:
+        trigger (str): pulse|slope|video|pattern|duration|timeout|runt|window|delay|setup
+        |nedge|rs232|iic|spi|can|flexray|lin|iis|m1553
+    Returns:
+        str: trigger type after set
+    &#34;&#34;&#34;
     try:
-        self.triggerType = self.triggers[trigger.lower()]
-        self.triggerOn(trigger)
+        self.triggerType = main[&#39;triggers&#39;][trigger.lower()]
+        self._triggerOn(trigger)
         self.trigger = TriggerFactory.factory(trigger.upper(), self.instr )
         return self.trigger
     except KeyError as err:
@@ -321,37 +438,27 @@ class RigolMSO():
 </details>
 </dd>
 <dt id="mso.rigol.RigolMSO.sweepTrigger"><code class="name flex">
-<span>def <span class="ident">sweepTrigger</span></span>(<span>self, state)</span>
+<span>def <span class="ident">sweepTrigger</span></span>(<span>self, mode='auto')</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Set trigger mode</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>mode</code></strong> :&ensp;<code>str</code></dt>
+<dd>auto|single|normal</dd>
+</dl></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def sweepTrigger(self, state):
+<pre><code class="python">def sweepTrigger(self, mode=&#34;auto&#34;):
+    &#34;&#34;&#34;Set trigger mode
+    Args:
+        mode (str): auto|single|normal
+    &#34;&#34;&#34;
     try:
-        self.instr.write(&#34;:TRIGger:SWEep {0}&#34;.format(sweap[&#39;trigger&#39;][state.lower()]))
+        self.instr.write(&#34;:TRIGger:SWEep {0}&#34;.format(main[&#39;trigger&#39;][mode.lower()]))
     except KeyError as err:
-        print(&#39;Unsupported trigger sweap:&#39;, err)
+        print(&#39;Unsupported trigger sweep:&#39;, err)
         sys.exit()</code></pre>
-</details>
-</dd>
-<dt id="mso.rigol.RigolMSO.triggerOn"><code class="name flex">
-<span>def <span class="ident">triggerOn</span></span>(<span>self, trigger=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def triggerOn(self, trigger = None):
-    if trigger:
-        try:
-            self.instr.write(&#34;:TRIGger:MODE {0}&#34;.format(self.triggers[trigger.lower()]))
-        except KeyError as err:
-            print(&#39;Unsupported trigger:&#39;, err)
-            sys.exit()
-    else:
-        self.instr.write(&#34;:TRIGger:MODE {0}&#34;.format(self.triggerType))
-    return self._getTriggerType()</code></pre>
 </details>
 </dd>
 </dl>
@@ -375,15 +482,14 @@ class RigolMSO():
 <li>
 <h4><code><a title="mso.rigol.RigolMSO" href="#mso.rigol.RigolMSO">RigolMSO</a></code></h4>
 <ul class="two-column">
-<li><code><a title="mso.rigol.RigolMSO.enableSystem" href="#mso.rigol.RigolMSO.enableSystem">enableSystem</a></code></li>
 <li><code><a title="mso.rigol.RigolMSO.getAllTriggers" href="#mso.rigol.RigolMSO.getAllTriggers">getAllTriggers</a></code></li>
 <li><code><a title="mso.rigol.RigolMSO.getLastBus" href="#mso.rigol.RigolMSO.getLastBus">getLastBus</a></code></li>
 <li><code><a title="mso.rigol.RigolMSO.getSweep" href="#mso.rigol.RigolMSO.getSweep">getSweep</a></code></li>
-<li><code><a title="mso.rigol.RigolMSO.getTrigger" href="#mso.rigol.RigolMSO.getTrigger">getTrigger</a></code></li>
+<li><code><a title="mso.rigol.RigolMSO.getSystem" href="#mso.rigol.RigolMSO.getSystem">getSystem</a></code></li>
+<li><code><a title="mso.rigol.RigolMSO.getTriggerType" href="#mso.rigol.RigolMSO.getTriggerType">getTriggerType</a></code></li>
 <li><code><a title="mso.rigol.RigolMSO.setBus" href="#mso.rigol.RigolMSO.setBus">setBus</a></code></li>
-<li><code><a title="mso.rigol.RigolMSO.setTrigger" href="#mso.rigol.RigolMSO.setTrigger">setTrigger</a></code></li>
+<li><code><a title="mso.rigol.RigolMSO.setTriggerType" href="#mso.rigol.RigolMSO.setTriggerType">setTriggerType</a></code></li>
 <li><code><a title="mso.rigol.RigolMSO.sweepTrigger" href="#mso.rigol.RigolMSO.sweepTrigger">sweepTrigger</a></code></li>
-<li><code><a title="mso.rigol.RigolMSO.triggerOn" href="#mso.rigol.RigolMSO.triggerOn">triggerOn</a></code></li>
 </ul>
 </li>
 </ul>
