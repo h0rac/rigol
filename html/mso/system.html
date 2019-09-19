@@ -22,19 +22,37 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class System():
+<pre><code class="python">import os
+import json
+
+with open(&#34;{}/rigol/json/system/system.json&#34;.format(os.path.dirname(os.getcwd())), &#39;r&#39;) as f:
+    system = json.load(f)
+
+class System():
+    &#34;&#34;&#34;Class represents system config on device
+        Args:
+            instr (obj): vx11 instance object
+        Returns:
+            object: rigol object
+    &#34;&#34;&#34;       
     def __init__(self, instr):
         self.instr = instr
 
     def getOutput(self):
+        &#34;&#34;&#34;Returns:
+            str: trigger ouput value -&gt; output|pfail
+        &#34;&#34;&#34;       
         return  self.instr.ask(&#34;:SYSTem:AOUTput?&#34;)
     
     def output(self, value):
-        outputs = {&#34;tout&#34;:&#34;TOUT&#34;, &#34;pfail&#34;:&#34;PFAil&#34;}
+        &#34;&#34;&#34;
+        Args:
+            value (str): set trigger out port to output|pfail
+        &#34;&#34;&#34;
         try:
-            self.instr.write(&#34;:SYSTem:AOUTput {0}&#34;.format(outputs[value]))
+            self.instr.write(&#34;:SYSTem:AOUTput {0}&#34;.format(system[&#39;output&#39;][value.lower()]))
         except KeyError as err:
-                print(&#39;Unsupported output value:&#39;, err)</code></pre>
+            print(&#39;Unsupported output value:&#39;, err)</code></pre>
 </details>
 </section>
 <section>
@@ -51,22 +69,44 @@
 <span>(</span><span>instr)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Class represents system config on device</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>instr</code></strong> :&ensp;<code>obj</code></dt>
+<dd>vx11 instance object</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>object</code></strong></dt>
+<dd>rigol object</dd>
+</dl></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class System():
+    &#34;&#34;&#34;Class represents system config on device
+        Args:
+            instr (obj): vx11 instance object
+        Returns:
+            object: rigol object
+    &#34;&#34;&#34;       
     def __init__(self, instr):
         self.instr = instr
 
     def getOutput(self):
+        &#34;&#34;&#34;Returns:
+            str: trigger ouput value -&gt; output|pfail
+        &#34;&#34;&#34;       
         return  self.instr.ask(&#34;:SYSTem:AOUTput?&#34;)
     
     def output(self, value):
-        outputs = {&#34;tout&#34;:&#34;TOUT&#34;, &#34;pfail&#34;:&#34;PFAil&#34;}
+        &#34;&#34;&#34;
+        Args:
+            value (str): set trigger out port to output|pfail
+        &#34;&#34;&#34;
         try:
-            self.instr.write(&#34;:SYSTem:AOUTput {0}&#34;.format(outputs[value]))
+            self.instr.write(&#34;:SYSTem:AOUTput {0}&#34;.format(system[&#39;output&#39;][value.lower()]))
         except KeyError as err:
-                print(&#39;Unsupported output value:&#39;, err)</code></pre>
+            print(&#39;Unsupported output value:&#39;, err)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -74,10 +114,14 @@
 <span>def <span class="ident">getOutput</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns:
+str: trigger ouput value -&gt; output|pfail</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def getOutput(self):
+    &#34;&#34;&#34;Returns:
+        str: trigger ouput value -&gt; output|pfail
+    &#34;&#34;&#34;       
     return  self.instr.ask(&#34;:SYSTem:AOUTput?&#34;)</code></pre>
 </details>
 </dd>
@@ -85,15 +129,22 @@
 <span>def <span class="ident">output</span></span>(<span>self, value)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>str</code></dt>
+<dd>set trigger out port to output|pfail</dd>
+</dl></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def output(self, value):
-    outputs = {&#34;tout&#34;:&#34;TOUT&#34;, &#34;pfail&#34;:&#34;PFAil&#34;}
+    &#34;&#34;&#34;
+    Args:
+        value (str): set trigger out port to output|pfail
+    &#34;&#34;&#34;
     try:
-        self.instr.write(&#34;:SYSTem:AOUTput {0}&#34;.format(outputs[value]))
+        self.instr.write(&#34;:SYSTem:AOUTput {0}&#34;.format(system[&#39;output&#39;][value.lower()]))
     except KeyError as err:
-            print(&#39;Unsupported output value:&#39;, err)</code></pre>
+        print(&#39;Unsupported output value:&#39;, err)</code></pre>
 </details>
 </dd>
 </dl>

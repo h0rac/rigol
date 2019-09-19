@@ -42,7 +42,7 @@ class BusFactory(object):
             object: decoder object base on type
         &#34;&#34;&#34;
         if type == &#34;RS232&#34;:
-            return RS232Bus(instr, busNum)
+            return RS232(instr, busNum)
     factory = staticmethod(factory)
 
 class Bus():
@@ -284,10 +284,10 @@ class RS232(Bus):
         self.instr = instr
         self.busNum = busNum
     
-    def setRXSource(self, src):
+    def _setRXSource(self, src):
         pass
     
-    def setBoud(self):
+    def _setBoud(self):
         print(&#34;Boud set&#34;, self.busNum)</code></pre>
 </details>
 </section>
@@ -844,7 +844,7 @@ str: current position of decoder bus on screen</p></section>
             object: decoder object base on type
         &#34;&#34;&#34;
         if type == &#34;RS232&#34;:
-            return RS232Bus(instr, busNum)
+            return RS232(instr, busNum)
     factory = staticmethod(factory)</code></pre>
 </details>
 <h3>Static methods</h3>
@@ -875,7 +875,7 @@ str: current position of decoder bus on screen</p></section>
         object: decoder object base on type
     &#34;&#34;&#34;
     if type == &#34;RS232&#34;:
-        return RS232Bus(instr, busNum)</code></pre>
+        return RS232(instr, busNum)</code></pre>
 </details>
 </dd>
 </dl>
@@ -913,41 +913,16 @@ str: current position of decoder bus on screen</p></section>
         self.instr = instr
         self.busNum = busNum
     
-    def setRXSource(self, src):
+    def _setRXSource(self, src):
         pass
     
-    def setBoud(self):
+    def _setBoud(self):
         print(&#34;Boud set&#34;, self.busNum)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
 </ul>
-<h3>Methods</h3>
-<dl>
-<dt id="mso.bus.RS232.setBoud"><code class="name flex">
-<span>def <span class="ident">setBoud</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def setBoud(self):
-    print(&#34;Boud set&#34;, self.busNum)</code></pre>
-</details>
-</dd>
-<dt id="mso.bus.RS232.setRXSource"><code class="name flex">
-<span>def <span class="ident">setRXSource</span></span>(<span>self, src)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def setRXSource(self, src):
-    pass</code></pre>
-</details>
-</dd>
-</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
@@ -1009,10 +984,6 @@ str: current position of decoder bus on screen</p></section>
 </li>
 <li>
 <h4><code><a title="mso.bus.RS232" href="#mso.bus.RS232">RS232</a></code></h4>
-<ul class="">
-<li><code><a title="mso.bus.RS232.setBoud" href="#mso.bus.RS232.setBoud">setBoud</a></code></li>
-<li><code><a title="mso.bus.RS232.setRXSource" href="#mso.bus.RS232.setRXSource">setRXSource</a></code></li>
-</ul>
 </li>
 </ul>
 </li>

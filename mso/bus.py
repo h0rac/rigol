@@ -18,7 +18,7 @@ class BusFactory(object):
             object: decoder object base on type
         """
         if type == "RS232":
-            return RS232Bus(instr, busNum)
+            return RS232(instr, busNum)
     factory = staticmethod(factory)
 
 class Bus():
@@ -260,8 +260,8 @@ class RS232(Bus):
         self.instr = instr
         self.busNum = busNum
     
-    def setRXSource(self, src):
+    def _setRXSource(self, src):
         pass
     
-    def setBoud(self):
+    def _setBoud(self):
         print("Boud set", self.busNum)
