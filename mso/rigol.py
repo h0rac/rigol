@@ -112,7 +112,7 @@ class RigolMSO():
             busNum (int): line 1|2|3|4
             busType (str): parallel|rs232|spi|iic|iis|lin|can|flexray|m1553
         Returns:
-            obj: bus type object
+            obj: bus subclass object
         """
         self.mainBus = Bus(self.instr)
         try:
