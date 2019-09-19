@@ -1,6 +1,6 @@
 #!/usr/bin/python3 
 
-from rigol import RigolMSO
+from mso.rigol import RigolMSO
         
 mso5000 = RigolMSO("192.168.1.10")
 trigger = mso5000.setTrigger("rs232")
