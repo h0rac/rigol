@@ -9,5 +9,24 @@
         "can": "CAN",
         "flexray": "FLEXray",
         "m1553": "M1553"
+    },
+    "format": {
+        "ascii": "ASCii",
+        "hex": "HEX",
+        "dec": "DEC",
+        "bin": "BIN"
+    },
+    "event": {
+        "format": {
+        "ascii": "ASCii",
+        "hex": "HEX",
+        "dec": "DEC",
+        "bin": "BIN"
+        },
+        "view": {
+            "packets":"PACKets",
+            "details":"DETails",
+            "payload":"PAYLoad"
+        }
     }
 }

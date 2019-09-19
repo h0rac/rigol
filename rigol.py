@@ -70,14 +70,14 @@ class RigolMSO():
             print('Unsupported trigger:', err)
             sys.exit()
     
-    def sweapTrigger(self, state):
+    def sweepTrigger(self, state):
         try:
             self.instr.write(":TRIGger:SWEep {0}".format(sweap['trigger'][state.lower()]))
         except KeyError as err:
             print('Unsupported trigger sweap:', err)
             sys.exit()
 
-    def getSweap(self):
+    def getSweep(self):
         return self.instr.ask(":TRIGger:SWEep?")
     
     def enableSystem(self):
