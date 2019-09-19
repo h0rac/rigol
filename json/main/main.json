@@ -1,0 +1,28 @@
+{
+    "trigger": {
+        "auto": "AUTO",
+        "normal": "NORMal",
+        "single": "SINGle",
+        "start": "STARt"
+    },
+    "triggers":{"edge":"EDGE",
+        "pulse": "PULSe",
+        "slope":"SLOPe",
+        "video": "VIDeo",
+        "pattern": "PATTern",
+        "duration": "DURation", 
+        "timeout": "TIMeout",
+        "runt": "RUNT",
+        "window": "WINDow",
+        "delay":"DELay",
+        "setup":"SETup",
+        "nedge":"NEDGe", 
+        "rs232":"RS232",
+        "iic": "IIC",
+        "spi":"SPI",
+        "can":"CAN",
+        "flexray":"FLEXray",
+        "lin":"LIN",
+        "iis":"IIS",
+        "m1553":"M1553"}
+}
