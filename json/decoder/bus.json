@@ -5,7 +5,7 @@
         "spi": "SPI",
         "iic": "IIC",
         "iis": "IIS",
-        "lib": "LIN",
+        "lin": "LIN",
         "can": "CAN",
         "flexray": "FLEXray",
         "m1553": "M1553"
