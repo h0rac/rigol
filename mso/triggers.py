@@ -61,7 +61,7 @@ class RS232(Trigger):
         """
         return  self.instr.ask(":TRIGger:RS232:SOURce?")
 
-    def getBoud(self):
+    def getBaud(self):
         """Returns:
             str: boud rate
         """
@@ -233,7 +233,7 @@ class RS232(Trigger):
             dict: with default key,pair values
         """
         self.setup()
-        return {'src':self.getSourceChannel(), 'voltage':self.getVoltageLevel(), 'baud':self.getBoud(), "when":self.getWhen(),
+        return {'src':self.getSourceChannel(), 'voltage':self.getVoltageLevel(), 'baud':self.getBaud(), "when":self.getWhen(),
         'data':self.getData(), "stopBit":self.getStopBit()
          }
 
@@ -247,7 +247,7 @@ class RS232(Trigger):
         """Returns:
             dict: current configuration
         """
-        return {'src':self.getSourceChannel(), 'voltage':self.getVoltageLevel(), 'baud':self.getBoud(), 
+        return {'src':self.getSourceChannel(), 'voltage':self.getVoltageLevel(), 'baud':self.getBaud(), 
         'when':self.getWhen(), 'data':self.getData(), "dataBits":self.getDataBits(), "stopBit":self.getStopBit(), "parity":self.getParity()}
 
 class Timeout(Trigger):

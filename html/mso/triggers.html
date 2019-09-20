@@ -85,7 +85,7 @@ class RS232(Trigger):
         &#34;&#34;&#34;
         return  self.instr.ask(&#34;:TRIGger:RS232:SOURce?&#34;)
 
-    def getBoud(self):
+    def getBaud(self):
         &#34;&#34;&#34;Returns:
             str: boud rate
         &#34;&#34;&#34;
@@ -257,7 +257,7 @@ class RS232(Trigger):
             dict: with default key,pair values
         &#34;&#34;&#34;
         self.setup()
-        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), &#34;when&#34;:self.getWhen(),
+        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBaud(), &#34;when&#34;:self.getWhen(),
         &#39;data&#39;:self.getData(), &#34;stopBit&#34;:self.getStopBit()
          }
 
@@ -271,7 +271,7 @@ class RS232(Trigger):
         &#34;&#34;&#34;Returns:
             dict: current configuration
         &#34;&#34;&#34;
-        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), 
+        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBaud(), 
         &#39;when&#39;:self.getWhen(), &#39;data&#39;:self.getData(), &#34;dataBits&#34;:self.getDataBits(), &#34;stopBit&#34;:self.getStopBit(), &#34;parity&#34;:self.getParity()}
 
 class Timeout(Trigger):
@@ -653,7 +653,7 @@ class LIN(Trigger):
         &#34;&#34;&#34;
         return  self.instr.ask(&#34;:TRIGger:RS232:SOURce?&#34;)
 
-    def getBoud(self):
+    def getBaud(self):
         &#34;&#34;&#34;Returns:
             str: boud rate
         &#34;&#34;&#34;
@@ -825,7 +825,7 @@ class LIN(Trigger):
             dict: with default key,pair values
         &#34;&#34;&#34;
         self.setup()
-        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), &#34;when&#34;:self.getWhen(),
+        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBaud(), &#34;when&#34;:self.getWhen(),
         &#39;data&#39;:self.getData(), &#34;stopBit&#34;:self.getStopBit()
          }
 
@@ -839,7 +839,7 @@ class LIN(Trigger):
         &#34;&#34;&#34;Returns:
             dict: current configuration
         &#34;&#34;&#34;
-        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), 
+        return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBaud(), 
         &#39;when&#39;:self.getWhen(), &#39;data&#39;:self.getData(), &#34;dataBits&#34;:self.getDataBits(), &#34;stopBit&#34;:self.getStopBit(), &#34;parity&#34;:self.getParity()}</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -849,15 +849,15 @@ class LIN(Trigger):
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="mso.triggers.RS232.getBoud"><code class="name flex">
-<span>def <span class="ident">getBoud</span></span>(<span>self)</span>
+<dt id="mso.triggers.RS232.getBaud"><code class="name flex">
+<span>def <span class="ident">getBaud</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Returns:
 str: boud rate</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def getBoud(self):
+<pre><code class="python">def getBaud(self):
     &#34;&#34;&#34;Returns:
         str: boud rate
     &#34;&#34;&#34;
@@ -876,7 +876,7 @@ dict: current configuration</p></section>
     &#34;&#34;&#34;Returns:
         dict: current configuration
     &#34;&#34;&#34;
-    return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), 
+    return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBaud(), 
     &#39;when&#39;:self.getWhen(), &#39;data&#39;:self.getData(), &#34;dataBits&#34;:self.getDataBits(), &#34;stopBit&#34;:self.getStopBit(), &#34;parity&#34;:self.getParity()}</code></pre>
 </details>
 </dd>
@@ -1019,7 +1019,7 @@ str: when trigger will happen</p></section>
         dict: with default key,pair values
     &#34;&#34;&#34;
     self.setup()
-    return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBoud(), &#34;when&#34;:self.getWhen(),
+    return {&#39;src&#39;:self.getSourceChannel(), &#39;voltage&#39;:self.getVoltageLevel(), &#39;baud&#39;:self.getBaud(), &#34;when&#34;:self.getWhen(),
     &#39;data&#39;:self.getData(), &#34;stopBit&#34;:self.getStopBit()
      }</code></pre>
 </details>
@@ -1434,7 +1434,7 @@ def setup(self):
 <li>
 <h4><code><a title="mso.triggers.RS232" href="#mso.triggers.RS232">RS232</a></code></h4>
 <ul class="two-column">
-<li><code><a title="mso.triggers.RS232.getBoud" href="#mso.triggers.RS232.getBoud">getBoud</a></code></li>
+<li><code><a title="mso.triggers.RS232.getBaud" href="#mso.triggers.RS232.getBaud">getBaud</a></code></li>
 <li><code><a title="mso.triggers.RS232.getCurrentSetup" href="#mso.triggers.RS232.getCurrentSetup">getCurrentSetup</a></code></li>
 <li><code><a title="mso.triggers.RS232.getData" href="#mso.triggers.RS232.getData">getData</a></code></li>
 <li><code><a title="mso.triggers.RS232.getDataBits" href="#mso.triggers.RS232.getDataBits">getDataBits</a></code></li>
