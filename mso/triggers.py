@@ -103,7 +103,7 @@ class RS232(Trigger):
         """
         return  self.instr.ask(":TRIGger:RS232:WIDTh?")
 
-    def _setBoud(self, boud=9600):
+    def _setBaud(self, baud=9600):
         """Set boud lever for trigger
 
         Args:
@@ -112,9 +112,9 @@ class RS232(Trigger):
             then "A" should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
         """
         try:
-            self.instr.write(":TRIGger:RS232:BAUD {0}".format(boud))
+            self.instr.write(":TRIGger:RS232:BAUD {0}".format(baud))
         except ValueError as err:
-            print('Unsupported boud:', err)
+            print('Unsupported baud:', err)
     
     def _setVoltageLevel(self, voltage=0.0):
         """Set voltage lever for trigger
@@ -218,7 +218,7 @@ class RS232(Trigger):
         """
         self._setSourceChannel(src)
         self._setVoltageLevel(voltage)
-        self._setBoud(baud)
+        self._setBaud(baud)
         self._setWhen(when)
         if when == "data":
             self._setData(data)

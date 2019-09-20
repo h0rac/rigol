@@ -30,6 +30,9 @@ import sys
 with open(&#34;{}/rigol/json/decoder/bus.json&#34;.format(os.path.dirname(os.getcwd())), &#39;r&#39;) as f:
     bus = json.load(f)
 
+with open(&#34;{}/rigol/json/decoder/rs232.json&#34;.format(os.path.dirname(os.getcwd())), &#39;r&#39;) as f:
+    rs232 = json.load(f)
+
 class BusFactory(object):
     &#34;&#34;&#34;Class create decoder objects base on type
     &#34;&#34;&#34;
@@ -284,11 +287,189 @@ class RS232(Bus):
         self.instr = instr
         self.busNum = busNum
     
-    def _setRXSource(self, src):
-        pass
+    def _setRXSource(self, src=&#34;chan1&#34;):
+        &#34;&#34;&#34;
+         Args:
+            src (str): channel source or OFF
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:RX {1}&#34;.format(self.busNum, rs232[&#39;source&#39;][src.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported src&#34;, err)
+
+    def _setTXSource(self, src=&#34;chan1&#34;):
+        &#34;&#34;&#34;
+         Args:
+            src (str): channel source or OFF
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:TX {1}&#34;.format(self.busNum, rs232[&#39;source&#39;][src.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported src&#34;, err)
     
-    def _setBoud(self):
-        print(&#34;Boud set&#34;, self.busNum)
+    def _setPolarity(self, polarity=&#34;negative&#34;):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:POLarity {1}&#34;.format(self.busNum, rs232[&#39;polarity&#39;][polarity.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported polarity&#34;, err)
+    
+    def _setEndiannes(self, endian):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:ENDian {1}&#34;.format(self.busNum, rs232[&#39;endianness&#39;][endian.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported endian&#34;, err)
+        
+    def _setBaud(self, baud=9600):
+        &#34;&#34;&#34;Set boud lever for decoder
+
+        Args:
+            boud (str): baud rate for rs232
+            If the baud rate is set to a value with &#34;M&#34;, 
+            then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:BAUD {1}&#34;.format(self.busNum, baud))
+        except ValueError as err:
+            print(&#39;Unsupported boud:&#39;, err)
+    
+    def _setDbit(self, bit):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:DBITs {1}&#34;.format(self.busNum, [x for x in rs232[&#39;dbit&#39;] if x==bit][0]))
+        except IndexError as err:
+            print(&#34;Unsupported dbit&#34;, err)
+    
+    def _setSbit(self, bit):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:SBITs {1}&#34;.format(self.busNum, [x for x in rs232[&#39;sbit&#39;] if x==bit][0]))
+        except IndexError as err:
+            print(&#34;Unsupported sbit&#34;, err)
+    
+    def _setParity(self, parity):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:PARity {1}&#34;.format(self.busNum, rs232[&#39;parity&#39;][parity.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported parity&#34;, err)
+    
+    def _togglePacket(self, toggle):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:PACKet {1}&#34;.format(self.busNum, rs232[&#39;packet&#39;][toggle.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported toggle&#34;, err)
+    
+    def _setSeparator(self, separator):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:PEND {1}&#34;.format(self.busNum, rs232[&#39;separator&#39;][separator.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported separator&#34;, err)
+    
+    def getTXSource(self):
+        &#34;&#34;&#34;Returns
+            tx: source channel or OFF
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:TX?&#34;.format(self.busNum))
+
+    def getRXSource(self):
+        &#34;&#34;&#34;Returns
+            str: rx source channel or OFF
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:RX?&#34;.format(self.busNum))
+    
+    def getPolarity(self):
+        &#34;&#34;&#34;Returns
+            str: polarity NEG|POS
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:POLarity?&#34;.format(self.busNum))
+
+    def getEndianness(self):
+        &#34;&#34;&#34;Returns
+            str: endianness LSB|MSB
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:ENDian?&#34;.format(self.busNum))
+
+    def getBaud(self):
+        &#34;&#34;&#34;Returns
+            str: baud rate for rs232
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:BAUD?&#34;.format(self.busNum))
+
+    def getDataBit(self):
+        &#34;&#34;&#34;Returns
+            str: set databit 5|6|7|8|9
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:DBITs?&#34;.format(self.busNum))
+
+    def getStopBit(self):
+        &#34;&#34;&#34;Returns
+            str: stopBit 1|1.5|2
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:SBITs?&#34;.format(self.busNum))
+
+    def getParity(self):
+        &#34;&#34;&#34;Returns
+            str: parity NONE|ODD|EVEN
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:PARity?&#34;.format(self.busNum))
+
+    def getTogglePacket(self):
+        &#34;&#34;&#34;Returns
+            str: ON|OFF
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:PACKet?&#34;.format(self.busNum))
+
+    def getSeparator(self):
+        &#34;&#34;&#34;Returns
+            str: set separator option null|lf|sp|cr
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:PEND?&#34;.format(self.busNum))
+    
+    def getCurrentSetup(self):
+        &#34;&#34;&#34;Returns
+            dict: set options for rs232 decoder
+        &#34;&#34;&#34;
+        return {&#34;rxSrc&#34;:self.getRXSource(), 
+                &#34;txSrc&#34;:self.getTXSource(), 
+                &#34;polarity&#34;: self.getPolarity(),
+                &#34;endian&#34;:self.getEndianness(),
+                &#34;boud&#34;:self.getBaud(),
+                &#34;dbit&#34;:self.getDataBit(),
+                &#34;sbit&#34;:self.getStopBit(),
+                &#34;parity&#34;:self.getParity(),
+                &#34;togglePacket&#34;:self.getTogglePacket(),
+                &#34;separator&#34;:self.getSeparator()
+        }
+    
+    def setup(self, rxSrc=&#34;off&#34;, txSrc=&#34;off&#34;, polarity=&#34;negative&#34;, endian=&#34;little&#34;, baud=9600, 
+        dbit=8, sbit=1, parity=&#34;none&#34;, togglePacket=False, separator=&#34;null&#34;):
+        &#34;&#34;&#34;Single function to set rs232 decoder options
+         Args:
+            rxSrc (str): channel source -&gt;D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D10|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4|off
+            txSrc (str): channel source -&gt;D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D10|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4|off
+            polarity (str): negative|positive
+            endian (str): little|big
+            boud (str): If the baud rate is set to a value with &#34;M&#34;, 
+            then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
+            dbit (int): 5|6|7|8|9,
+            sbit (int/float): 1|1.5|2
+            parity (str): none|even|odd
+            togglePacket (bool): Enables or disables the packet end during data transmission; or queries the status of packet end during data transmission -&gt; True|False
+            separator (str): end packet separator null|lf|cr|sp
+        &#34;&#34;&#34;
+        self._setRXSource(rxSrc)
+        self._setTXSource(txSrc)
+        self._setPolarity(polarity)
+        self._setEndiannes(endian)
+        self._setBaud(baud)
+        self._setDbit(dbit)
+        self._setSbit(sbit)
+        self._setParity(parity)
+        if togglePacket == True:
+            self._togglePacket(&#34;on&#34;)
+        elif togglePacket == False:
+            self._togglePacket(&#34;off&#34;)
+        else:
+            print(&#34;Unsupported toggle value&#34;)
+        self._setSeparator(separator)
+
     
 class Parallel(Bus):
     &#34;&#34;&#34;Class represents Parallel decoder
@@ -1424,16 +1605,434 @@ str: current position of decoder bus on screen</p></section>
         self.instr = instr
         self.busNum = busNum
     
-    def _setRXSource(self, src):
-        pass
+    def _setRXSource(self, src=&#34;chan1&#34;):
+        &#34;&#34;&#34;
+         Args:
+            src (str): channel source or OFF
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:RX {1}&#34;.format(self.busNum, rs232[&#39;source&#39;][src.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported src&#34;, err)
+
+    def _setTXSource(self, src=&#34;chan1&#34;):
+        &#34;&#34;&#34;
+         Args:
+            src (str): channel source or OFF
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:TX {1}&#34;.format(self.busNum, rs232[&#39;source&#39;][src.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported src&#34;, err)
     
-    def _setBoud(self):
-        print(&#34;Boud set&#34;, self.busNum)</code></pre>
+    def _setPolarity(self, polarity=&#34;negative&#34;):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:POLarity {1}&#34;.format(self.busNum, rs232[&#39;polarity&#39;][polarity.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported polarity&#34;, err)
+    
+    def _setEndiannes(self, endian):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:ENDian {1}&#34;.format(self.busNum, rs232[&#39;endianness&#39;][endian.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported endian&#34;, err)
+        
+    def _setBaud(self, baud=9600):
+        &#34;&#34;&#34;Set boud lever for decoder
+
+        Args:
+            boud (str): baud rate for rs232
+            If the baud rate is set to a value with &#34;M&#34;, 
+            then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
+        &#34;&#34;&#34;
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:BAUD {1}&#34;.format(self.busNum, baud))
+        except ValueError as err:
+            print(&#39;Unsupported boud:&#39;, err)
+    
+    def _setDbit(self, bit):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:DBITs {1}&#34;.format(self.busNum, [x for x in rs232[&#39;dbit&#39;] if x==bit][0]))
+        except IndexError as err:
+            print(&#34;Unsupported dbit&#34;, err)
+    
+    def _setSbit(self, bit):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:SBITs {1}&#34;.format(self.busNum, [x for x in rs232[&#39;sbit&#39;] if x==bit][0]))
+        except IndexError as err:
+            print(&#34;Unsupported sbit&#34;, err)
+    
+    def _setParity(self, parity):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:PARity {1}&#34;.format(self.busNum, rs232[&#39;parity&#39;][parity.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported parity&#34;, err)
+    
+    def _togglePacket(self, toggle):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:PACKet {1}&#34;.format(self.busNum, rs232[&#39;packet&#39;][toggle.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported toggle&#34;, err)
+    
+    def _setSeparator(self, separator):
+        try:
+            self.instr.write(&#34;:BUS{0}:RS232:PEND {1}&#34;.format(self.busNum, rs232[&#39;separator&#39;][separator.lower()]))
+        except KeyError as err:
+            print(&#34;Unsupported separator&#34;, err)
+    
+    def getTXSource(self):
+        &#34;&#34;&#34;Returns
+            tx: source channel or OFF
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:TX?&#34;.format(self.busNum))
+
+    def getRXSource(self):
+        &#34;&#34;&#34;Returns
+            str: rx source channel or OFF
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:RX?&#34;.format(self.busNum))
+    
+    def getPolarity(self):
+        &#34;&#34;&#34;Returns
+            str: polarity NEG|POS
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:POLarity?&#34;.format(self.busNum))
+
+    def getEndianness(self):
+        &#34;&#34;&#34;Returns
+            str: endianness LSB|MSB
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:ENDian?&#34;.format(self.busNum))
+
+    def getBaud(self):
+        &#34;&#34;&#34;Returns
+            str: baud rate for rs232
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:BAUD?&#34;.format(self.busNum))
+
+    def getDataBit(self):
+        &#34;&#34;&#34;Returns
+            str: set databit 5|6|7|8|9
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:DBITs?&#34;.format(self.busNum))
+
+    def getStopBit(self):
+        &#34;&#34;&#34;Returns
+            str: stopBit 1|1.5|2
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:SBITs?&#34;.format(self.busNum))
+
+    def getParity(self):
+        &#34;&#34;&#34;Returns
+            str: parity NONE|ODD|EVEN
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:PARity?&#34;.format(self.busNum))
+
+    def getTogglePacket(self):
+        &#34;&#34;&#34;Returns
+            str: ON|OFF
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:PACKet?&#34;.format(self.busNum))
+
+    def getSeparator(self):
+        &#34;&#34;&#34;Returns
+            str: set separator option null|lf|sp|cr
+        &#34;&#34;&#34;
+        return self.instr.ask(&#34;:BUS{0}:RS232:PEND?&#34;.format(self.busNum))
+    
+    def getCurrentSetup(self):
+        &#34;&#34;&#34;Returns
+            dict: set options for rs232 decoder
+        &#34;&#34;&#34;
+        return {&#34;rxSrc&#34;:self.getRXSource(), 
+                &#34;txSrc&#34;:self.getTXSource(), 
+                &#34;polarity&#34;: self.getPolarity(),
+                &#34;endian&#34;:self.getEndianness(),
+                &#34;boud&#34;:self.getBaud(),
+                &#34;dbit&#34;:self.getDataBit(),
+                &#34;sbit&#34;:self.getStopBit(),
+                &#34;parity&#34;:self.getParity(),
+                &#34;togglePacket&#34;:self.getTogglePacket(),
+                &#34;separator&#34;:self.getSeparator()
+        }
+    
+    def setup(self, rxSrc=&#34;off&#34;, txSrc=&#34;off&#34;, polarity=&#34;negative&#34;, endian=&#34;little&#34;, baud=9600, 
+        dbit=8, sbit=1, parity=&#34;none&#34;, togglePacket=False, separator=&#34;null&#34;):
+        &#34;&#34;&#34;Single function to set rs232 decoder options
+         Args:
+            rxSrc (str): channel source -&gt;D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D10|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4|off
+            txSrc (str): channel source -&gt;D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D10|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4|off
+            polarity (str): negative|positive
+            endian (str): little|big
+            boud (str): If the baud rate is set to a value with &#34;M&#34;, 
+            then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
+            dbit (int): 5|6|7|8|9,
+            sbit (int/float): 1|1.5|2
+            parity (str): none|even|odd
+            togglePacket (bool): Enables or disables the packet end during data transmission; or queries the status of packet end during data transmission -&gt; True|False
+            separator (str): end packet separator null|lf|cr|sp
+        &#34;&#34;&#34;
+        self._setRXSource(rxSrc)
+        self._setTXSource(txSrc)
+        self._setPolarity(polarity)
+        self._setEndiannes(endian)
+        self._setBaud(baud)
+        self._setDbit(dbit)
+        self._setSbit(sbit)
+        self._setParity(parity)
+        if togglePacket == True:
+            self._togglePacket(&#34;on&#34;)
+        elif togglePacket == False:
+            self._togglePacket(&#34;off&#34;)
+        else:
+            print(&#34;Unsupported toggle value&#34;)
+        self._setSeparator(separator)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></li>
 </ul>
+<h3>Methods</h3>
+<dl>
+<dt id="mso.bus.RS232.getBaud"><code class="name flex">
+<span>def <span class="ident">getBaud</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: baud rate for rs232</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getBaud(self):
+    &#34;&#34;&#34;Returns
+        str: baud rate for rs232
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:BAUD?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getCurrentSetup"><code class="name flex">
+<span>def <span class="ident">getCurrentSetup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+dict: set options for rs232 decoder</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getCurrentSetup(self):
+    &#34;&#34;&#34;Returns
+        dict: set options for rs232 decoder
+    &#34;&#34;&#34;
+    return {&#34;rxSrc&#34;:self.getRXSource(), 
+            &#34;txSrc&#34;:self.getTXSource(), 
+            &#34;polarity&#34;: self.getPolarity(),
+            &#34;endian&#34;:self.getEndianness(),
+            &#34;boud&#34;:self.getBaud(),
+            &#34;dbit&#34;:self.getDataBit(),
+            &#34;sbit&#34;:self.getStopBit(),
+            &#34;parity&#34;:self.getParity(),
+            &#34;togglePacket&#34;:self.getTogglePacket(),
+            &#34;separator&#34;:self.getSeparator()
+    }</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getDataBit"><code class="name flex">
+<span>def <span class="ident">getDataBit</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: set databit 5|6|7|8|9</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getDataBit(self):
+    &#34;&#34;&#34;Returns
+        str: set databit 5|6|7|8|9
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:DBITs?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getEndianness"><code class="name flex">
+<span>def <span class="ident">getEndianness</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: endianness LSB|MSB</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getEndianness(self):
+    &#34;&#34;&#34;Returns
+        str: endianness LSB|MSB
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:ENDian?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getParity"><code class="name flex">
+<span>def <span class="ident">getParity</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: parity NONE|ODD|EVEN</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getParity(self):
+    &#34;&#34;&#34;Returns
+        str: parity NONE|ODD|EVEN
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:PARity?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getPolarity"><code class="name flex">
+<span>def <span class="ident">getPolarity</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: polarity NEG|POS</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getPolarity(self):
+    &#34;&#34;&#34;Returns
+        str: polarity NEG|POS
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:POLarity?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getRXSource"><code class="name flex">
+<span>def <span class="ident">getRXSource</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: rx source channel or OFF</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRXSource(self):
+    &#34;&#34;&#34;Returns
+        str: rx source channel or OFF
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:RX?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getSeparator"><code class="name flex">
+<span>def <span class="ident">getSeparator</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: set separator option null|lf|sp|cr</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getSeparator(self):
+    &#34;&#34;&#34;Returns
+        str: set separator option null|lf|sp|cr
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:PEND?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getStopBit"><code class="name flex">
+<span>def <span class="ident">getStopBit</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: stopBit 1|1.5|2</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getStopBit(self):
+    &#34;&#34;&#34;Returns
+        str: stopBit 1|1.5|2
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:SBITs?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getTXSource"><code class="name flex">
+<span>def <span class="ident">getTXSource</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+tx: source channel or OFF</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getTXSource(self):
+    &#34;&#34;&#34;Returns
+        tx: source channel or OFF
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:TX?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.getTogglePacket"><code class="name flex">
+<span>def <span class="ident">getTogglePacket</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns
+str: ON|OFF</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getTogglePacket(self):
+    &#34;&#34;&#34;Returns
+        str: ON|OFF
+    &#34;&#34;&#34;
+    return self.instr.ask(&#34;:BUS{0}:RS232:PACKet?&#34;.format(self.busNum))</code></pre>
+</details>
+</dd>
+<dt id="mso.bus.RS232.setup"><code class="name flex">
+<span>def <span class="ident">setup</span></span>(<span>self, rxSrc='off', txSrc='off', polarity='negative', endian='little', baud=9600, dbit=8, sbit=1, parity='none', togglePacket=False, separator='null')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Single function to set rs232 decoder options</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>rxSrc</code></strong> :&ensp;<code>str</code></dt>
+<dd>channel source -&gt;D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D10|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4|off</dd>
+<dt><strong><code>txSrc</code></strong> :&ensp;<code>str</code></dt>
+<dd>channel source -&gt;D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D10|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4|off</dd>
+<dt><strong><code>polarity</code></strong> :&ensp;<code>str</code></dt>
+<dd>negative|positive</dd>
+<dt><strong><code>endian</code></strong> :&ensp;<code>str</code></dt>
+<dd>little|big</dd>
+<dt><strong><code>boud</code></strong> :&ensp;<code>str</code></dt>
+<dd>If the baud rate is set to a value with "M", </dd>
+<dt>then "A" should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA</dt>
+<dt><strong><code>dbit</code></strong> :&ensp;<code>int</code></dt>
+<dd>5|6|7|8|9,</dd>
+<dt>sbit (int/float): 1|1.5|2</dt>
+<dt><strong><code>parity</code></strong> :&ensp;<code>str</code></dt>
+<dd>none|even|odd</dd>
+<dt><strong><code>togglePacket</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Enables or disables the packet end during data transmission; or queries the status of packet end during data transmission -&gt; True|False</dd>
+<dt><strong><code>separator</code></strong> :&ensp;<code>str</code></dt>
+<dd>end packet separator null|lf|cr|sp</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setup(self, rxSrc=&#34;off&#34;, txSrc=&#34;off&#34;, polarity=&#34;negative&#34;, endian=&#34;little&#34;, baud=9600, 
+    dbit=8, sbit=1, parity=&#34;none&#34;, togglePacket=False, separator=&#34;null&#34;):
+    &#34;&#34;&#34;Single function to set rs232 decoder options
+     Args:
+        rxSrc (str): channel source -&gt;D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D10|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4|off
+        txSrc (str): channel source -&gt;D0|D1|D2|D3|D4|D5|D6|D7|D8|D9|D10|D11|D12|D13|D14|D15|chan1|chan2|chan3|chan4|off
+        polarity (str): negative|positive
+        endian (str): little|big
+        boud (str): If the baud rate is set to a value with &#34;M&#34;, 
+        then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
+        dbit (int): 5|6|7|8|9,
+        sbit (int/float): 1|1.5|2
+        parity (str): none|even|odd
+        togglePacket (bool): Enables or disables the packet end during data transmission; or queries the status of packet end during data transmission -&gt; True|False
+        separator (str): end packet separator null|lf|cr|sp
+    &#34;&#34;&#34;
+    self._setRXSource(rxSrc)
+    self._setTXSource(txSrc)
+    self._setPolarity(polarity)
+    self._setEndiannes(endian)
+    self._setBaud(baud)
+    self._setDbit(dbit)
+    self._setSbit(sbit)
+    self._setParity(parity)
+    if togglePacket == True:
+        self._togglePacket(&#34;on&#34;)
+    elif togglePacket == False:
+        self._togglePacket(&#34;off&#34;)
+    else:
+        print(&#34;Unsupported toggle value&#34;)
+    self._setSeparator(separator)</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mso.bus.Bus" href="#mso.bus.Bus">Bus</a></b></code>:
@@ -1441,14 +2040,12 @@ str: current position of decoder bus on screen</p></section>
 <li><code><a title="mso.bus.Bus.getBusDataFormat" href="#mso.bus.Bus.getBusDataFormat">getBusDataFormat</a></code></li>
 <li><code><a title="mso.bus.Bus.getBusLabelStatus" href="#mso.bus.Bus.getBusLabelStatus">getBusLabelStatus</a></code></li>
 <li><code><a title="mso.bus.Bus.getBusStatus" href="#mso.bus.Bus.getBusStatus">getBusStatus</a></code></li>
-<li><code><a title="mso.bus.Bus.getCurrentSetup" href="#mso.bus.Bus.getCurrentSetup">getCurrentSetup</a></code></li>
 <li><code><a title="mso.bus.Bus.getEventTableFormat" href="#mso.bus.Bus.getEventTableFormat">getEventTableFormat</a></code></li>
 <li><code><a title="mso.bus.Bus.getEventTableStatus" href="#mso.bus.Bus.getEventTableStatus">getEventTableStatus</a></code></li>
 <li><code><a title="mso.bus.Bus.getEventTableView" href="#mso.bus.Bus.getEventTableView">getEventTableView</a></code></li>
 <li><code><a title="mso.bus.Bus.getMode" href="#mso.bus.Bus.getMode">getMode</a></code></li>
 <li><code><a title="mso.bus.Bus.getPosition" href="#mso.bus.Bus.getPosition">getPosition</a></code></li>
 <li><code><a title="mso.bus.Bus.getThreshold" href="#mso.bus.Bus.getThreshold">getThreshold</a></code></li>
-<li><code><a title="mso.bus.Bus.setup" href="#mso.bus.Bus.setup">setup</a></code></li>
 <li><code><a title="mso.bus.Bus.toggleEventTable" href="#mso.bus.Bus.toggleEventTable">toggleEventTable</a></code></li>
 </ul>
 </li>
@@ -1573,6 +2170,20 @@ str: current position of decoder bus on screen</p></section>
 </li>
 <li>
 <h4><code><a title="mso.bus.RS232" href="#mso.bus.RS232">RS232</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mso.bus.RS232.getBaud" href="#mso.bus.RS232.getBaud">getBaud</a></code></li>
+<li><code><a title="mso.bus.RS232.getCurrentSetup" href="#mso.bus.RS232.getCurrentSetup">getCurrentSetup</a></code></li>
+<li><code><a title="mso.bus.RS232.getDataBit" href="#mso.bus.RS232.getDataBit">getDataBit</a></code></li>
+<li><code><a title="mso.bus.RS232.getEndianness" href="#mso.bus.RS232.getEndianness">getEndianness</a></code></li>
+<li><code><a title="mso.bus.RS232.getParity" href="#mso.bus.RS232.getParity">getParity</a></code></li>
+<li><code><a title="mso.bus.RS232.getPolarity" href="#mso.bus.RS232.getPolarity">getPolarity</a></code></li>
+<li><code><a title="mso.bus.RS232.getRXSource" href="#mso.bus.RS232.getRXSource">getRXSource</a></code></li>
+<li><code><a title="mso.bus.RS232.getSeparator" href="#mso.bus.RS232.getSeparator">getSeparator</a></code></li>
+<li><code><a title="mso.bus.RS232.getStopBit" href="#mso.bus.RS232.getStopBit">getStopBit</a></code></li>
+<li><code><a title="mso.bus.RS232.getTXSource" href="#mso.bus.RS232.getTXSource">getTXSource</a></code></li>
+<li><code><a title="mso.bus.RS232.getTogglePacket" href="#mso.bus.RS232.getTogglePacket">getTogglePacket</a></code></li>
+<li><code><a title="mso.bus.RS232.setup" href="#mso.bus.RS232.setup">setup</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mso.bus.SPI" href="#mso.bus.SPI">SPI</a></code></h4>

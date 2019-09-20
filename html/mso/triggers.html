@@ -127,7 +127,7 @@ class RS232(Trigger):
         &#34;&#34;&#34;
         return  self.instr.ask(&#34;:TRIGger:RS232:WIDTh?&#34;)
 
-    def _setBoud(self, boud=9600):
+    def _setBaud(self, baud=9600):
         &#34;&#34;&#34;Set boud lever for trigger
 
         Args:
@@ -136,9 +136,9 @@ class RS232(Trigger):
             then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
         &#34;&#34;&#34;
         try:
-            self.instr.write(&#34;:TRIGger:RS232:BAUD {0}&#34;.format(boud))
+            self.instr.write(&#34;:TRIGger:RS232:BAUD {0}&#34;.format(baud))
         except ValueError as err:
-            print(&#39;Unsupported boud:&#39;, err)
+            print(&#39;Unsupported baud:&#39;, err)
     
     def _setVoltageLevel(self, voltage=0.0):
         &#34;&#34;&#34;Set voltage lever for trigger
@@ -242,7 +242,7 @@ class RS232(Trigger):
         &#34;&#34;&#34;
         self._setSourceChannel(src)
         self._setVoltageLevel(voltage)
-        self._setBoud(baud)
+        self._setBaud(baud)
         self._setWhen(when)
         if when == &#34;data&#34;:
             self._setData(data)
@@ -695,7 +695,7 @@ class LIN(Trigger):
         &#34;&#34;&#34;
         return  self.instr.ask(&#34;:TRIGger:RS232:WIDTh?&#34;)
 
-    def _setBoud(self, boud=9600):
+    def _setBaud(self, baud=9600):
         &#34;&#34;&#34;Set boud lever for trigger
 
         Args:
@@ -704,9 +704,9 @@ class LIN(Trigger):
             then &#34;A&#34; should be added at the end of the value. For example, if you send 5 M, you need to send 5 MA
         &#34;&#34;&#34;
         try:
-            self.instr.write(&#34;:TRIGger:RS232:BAUD {0}&#34;.format(boud))
+            self.instr.write(&#34;:TRIGger:RS232:BAUD {0}&#34;.format(baud))
         except ValueError as err:
-            print(&#39;Unsupported boud:&#39;, err)
+            print(&#39;Unsupported baud:&#39;, err)
     
     def _setVoltageLevel(self, voltage=0.0):
         &#34;&#34;&#34;Set voltage lever for trigger
@@ -810,7 +810,7 @@ class LIN(Trigger):
         &#34;&#34;&#34;
         self._setSourceChannel(src)
         self._setVoltageLevel(voltage)
-        self._setBoud(baud)
+        self._setBaud(baud)
         self._setWhen(when)
         if when == &#34;data&#34;:
             self._setData(data)
@@ -1065,7 +1065,7 @@ str: when trigger will happen</p></section>
     &#34;&#34;&#34;
     self._setSourceChannel(src)
     self._setVoltageLevel(voltage)
-    self._setBoud(baud)
+    self._setBaud(baud)
     self._setWhen(when)
     if when == &#34;data&#34;:
         self._setData(data)

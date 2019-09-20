@@ -140,8 +140,12 @@ class RigolMSO():
         &#34;&#34;&#34;
         self.mainBus = Bus(self.instr)
         try:
-            self.mainBus._setBus(int(busNum), busType)
-            self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
+            if busNum &gt;= 1 and busNum &lt;=4:
+                self.mainBus._setBus(int(busNum), busType)
+                self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
+            else:
+                print(&#34;Bus number between 1-4 required&#34;)
+                sys,exit()
         except ValueError as err:
              print(&#39;Unsupported busNum:&#39;, err)
              sys.exit()
@@ -279,8 +283,12 @@ class RigolMSO():
         &#34;&#34;&#34;
         self.mainBus = Bus(self.instr)
         try:
-            self.mainBus._setBus(int(busNum), busType)
-            self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
+            if busNum &gt;= 1 and busNum &lt;=4:
+                self.mainBus._setBus(int(busNum), busType)
+                self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
+            else:
+                print(&#34;Bus number between 1-4 required&#34;)
+                sys,exit()
         except ValueError as err:
              print(&#39;Unsupported busNum:&#39;, err)
              sys.exit()
@@ -393,8 +401,12 @@ str: selected trigger type</p></section>
     &#34;&#34;&#34;
     self.mainBus = Bus(self.instr)
     try:
-        self.mainBus._setBus(int(busNum), busType)
-        self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
+        if busNum &gt;= 1 and busNum &lt;=4:
+            self.mainBus._setBus(int(busNum), busType)
+            self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
+        else:
+            print(&#34;Bus number between 1-4 required&#34;)
+            sys,exit()
     except ValueError as err:
          print(&#39;Unsupported busNum:&#39;, err)
          sys.exit()

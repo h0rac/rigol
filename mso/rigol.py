@@ -116,8 +116,12 @@ class RigolMSO():
         """
         self.mainBus = Bus(self.instr)
         try:
-            self.mainBus._setBus(int(busNum), busType)
-            self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
+            if busNum >= 1 and busNum <=4:
+                self.mainBus._setBus(int(busNum), busType)
+                self.bus = BusFactory.factory(busType.upper(), self.instr, busNum)
+            else:
+                print("Bus number between 1-4 required")
+                sys,exit()
         except ValueError as err:
              print('Unsupported busNum:', err)
              sys.exit()
